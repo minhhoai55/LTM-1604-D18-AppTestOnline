@@ -40,6 +40,20 @@ Client GUI đẹp, scroll mượt, submit disable sau khi nộp, hiển thị đ
   <em>Hình 1: Giao diện khi vào ứng dụng  </em>
 </p>
 
+<p align="center">
+  <img src="docs/saukhilamxong.jpg" alt="Ảnh 3" width="500"/>
+ 
+</p>
+<p align="center">
+  <em> Hình 2: Sau khi làm xong bài  </em>
+</p>
+
+<p align="center">
+    <img src="docs/ketquasaukhixg.png" alt="Ảnh 4" width="450"/>
+</p>
+<p align="center">
+  <em> Hình 3: Kết quả sau khi làm </em>
+</p>
 
 ## 🔧 2. Công nghệ sử dụng  
 
@@ -172,3 +186,11 @@ Client và server giao tiếp qua TCP/IP, port mặc định 5000.
 Kết quả luôn được lưu trong danh sách results realtime trên server GUI.
 
 Có thể mở nhiều client cùng lúc để kiểm tra kết quả đồng thời.
+## 👜Thông tin cá nhân
+**Họ tên**: Khổng Minh Hoài
+**Lớp**: CNTT 16-04
+**Email**: khonghoai.15052004@gmail.com
+
+© 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+
+---
