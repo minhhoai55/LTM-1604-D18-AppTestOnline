@@ -98,9 +98,9 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
   <em>Hình 3: Kết quả sau khi làm</em>
 </p>
 
-📦 4. Cài Đặt Và Triển Khai
 
-🔧 Bước 1. Chuẩn Bị Môi Trường
+### 📦 4. Cài đặt và triển khai
+**Bước 1: Chuẩn Bị Môi Trường**
 
 Cài đặt JDK 8+ ☕.
 
@@ -130,8 +130,8 @@ CREATE TABLE results (
 );
 
 
-📦 Bước 2. Biên Dịch Mã Nguồn
 
+**Bước 2: Biên Dịch Mã Nguồn**
 Mở terminal, điều hướng vào thư mục UngDungTracNghiem_TCP.
 
 Biên dịch toàn bộ file:
@@ -139,9 +139,7 @@ Biên dịch toàn bộ file:
 javac quiz/*.java
 
 
-Kết quả: các file .class được tạo trong thư mục quiz/.
-
-🚀 Bước 3. Chạy Ứng Dụng
+**Bước 3: Chạy Ứng Dụng**
 
 Khởi động Server:
 
@@ -152,10 +150,12 @@ java quiz.QuizServer
 
 Khởi động Client:
 
+
 java quiz.QuizClient
 
-
 👉 Mỗi client mở trong cửa sổ riêng, nhập tên → Start → làm bài → nhận điểm số cuối cùng.
+
+
 
 ## 🔧 5. Liên hệ ( cá nhân )
 
