@@ -98,111 +98,64 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
   <em>Hình 3: Kết quả sau khi làm</em>
 </p>
 
+📦 4. Cài Đặt Và Triển Khai
 
-### 📦 4. Cài đặt và triển khai
-**Bước 1: Chuẩn Bị Môi Trường**
+🔧 Bước 1. Chuẩn Bị Môi Trường
 
-Kiểm tra Java:
+Cài đặt JDK 8+ ☕.
 
-java -version
+Cài đặt MySQL/MariaDB 🗄️.
 
-javac -version
-
-
-Đảm bảo hiển thị Java 8 trở lên.
-
-Cài đặt MySQL/MariaDB và tạo cơ sở dữ liệu:
+Tạo cơ sở dữ liệu và bảng:
 
 CREATE DATABASE BTLQuiz;
-
 USE BTLQuiz;
 
--- Tạo bảng questions
 CREATE TABLE questions (
-
     id INT AUTO_INCREMENT PRIMARY KEY,
-    
     content TEXT NOT NULL,
-    
     option1 VARCHAR(255),
-    
     option2 VARCHAR(255),
-    
     option3 VARCHAR(255),
-    
     option4 VARCHAR(255),
-    
     answerIndex INT
-    
 );
-
--- Tạo bảng results
-
 
 CREATE TABLE results (
-
     id INT AUTO_INCREMENT PRIMARY KEY,
-    
     name VARCHAR(255),
-    
     score INT,
-    
     ip VARCHAR(50),
-    
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    
 );
 
 
-Tải mã nguồn:
+📦 Bước 2. Biên Dịch Mã Nguồn
 
-Sao chép thư mục UngDungTracNghiem_TCP chứa các file:
+Mở terminal, điều hướng vào thư mục UngDungTracNghiem_TCP.
 
-QuizServer.java, QuizClient.java, QuizClientSwing.java, Question.java, ResultsViewerSwing.java.
-
-**Bước 2: Biên Dịch Mã Nguồn**
-
-Mở terminal và điều hướng đến thư mục chứa mã nguồn.
-
-Biên dịch tất cả file:
+Biên dịch toàn bộ file:
 
 javac quiz/*.java
 
 
-Hoặc biên dịch từng file:
+Kết quả: các file .class được tạo trong thư mục quiz/.
 
-javac quiz/QuizServer.java
-javac quiz/QuizClient.java
-javac quiz/QuizClientSwing.java
-javac quiz/Question.java
-javac quiz/ResultsViewerSwing.java
-
-
-Kết quả: các file .class tương ứng sẽ được tạo ra trong thư mục quiz.
-
-**Bước 3: Chạy Ứng Dụng**
+🚀 Bước 3. Chạy Ứng Dụng
 
 Khởi động Server:
 
 java quiz.QuizServer
 
 
-Server sẽ khởi động ở port mặc định 5000.
-
-Console hiển thị log khi có client kết nối.
-
-Server tạo GUI admin ResultsViewerSwing để hiển thị kết quả realtime.
+👉 Server chạy port 5000, hiển thị log kết nối, mở GUI admin ResultsViewerSwing.
 
 Khởi động Client:
 
 java quiz.QuizClient
 
 
-Mỗi client mở trong cửa sổ riêng (GUI Swing).
-
-Nhập Tên sinh viên → bấm Start để nhận câu hỏi.
-
-Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
+👉 Mỗi client mở trong cửa sổ riêng, nhập tên → Start → làm bài → nhận điểm số cuối cùng.
 
 ## 🔧 5. Liên hệ ( cá nhân )
 
