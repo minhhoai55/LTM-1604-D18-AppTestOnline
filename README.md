@@ -40,12 +40,13 @@ Client GUI đẹp, scroll mượt, submit disable sau khi nộp, hiển thị đ
   <em>Hình 1: Giao diện khi vào ứng dụng  </em>
 </p>
 
+SQL
 <p align="center">
-  <img src="docs/saukhilamxong.jpg" alt="Ảnh 3" width="500"/>
+  <img src="docs/bangsql.png" alt="Ảnh 3" width="500"/>
  
 </p>
 <p align="center">
-  <em> Hình 2: Sau khi làm xong bài  </em>
+  <em> Sql lưu trữ câu hỏi  </em>
 </p>
 
 <p align="center">
@@ -57,31 +58,16 @@ Client GUI đẹp, scroll mượt, submit disable sau khi nộp, hiển thị đ
 
 ## 🔧 2. Công nghệ sử dụng  
 
-Các công nghệ được sử dụng để xây dựng ứng dụng Client–Server TCP với Java Swing:
-
-Java SE 8+: Ngôn ngữ lập trình chính và thư viện chuẩn.
-
-Java Swing: Xây dựng giao diện GUI cho client và server.
-
-TCP Socket: Giao thức truyền dữ liệu tin cậy giữa client và server.
-
-MySQL: Lưu trữ câu hỏi (questions) và kết quả (results) của sinh viên.
-
-Multi-threading: Cho phép server phục vụ nhiều client đồng thời.
-
-Object Serialization: Truyền các đối tượng Java (Question, danh sách câu trả lời) qua mạng.
-
-JScrollPane: Hiển thị câu hỏi nhiều dòng và scroll mượt trên client.
-
-JList + DefaultListModel: Hiển thị kết quả realtime trên server.
-SQL
-<p align="center">
-  <img src="docs/bangsql.png" alt="Ảnh 3" width="500"/>
- 
-</p>
-<p align="center">
-  <em> Sql lưu trữ câu hỏi  </em>
-</p>
+[![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html) 
+[![Swing](https://img.shields.io/badge/Java%20Swing-007396?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/) 
+[![Nimbus](https://img.shields.io/badge/Nimbus%20Look&Feel-4B0082?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/nimbus.html) 
+[![UDP](https://img.shields.io/badge/UDP%20Socket-00599C?style=for-the-badge&logo=socket.io&logoColor=white)](https://docs.oracle.com/javase/tutorial/networking/datagrams/) 
+[![HTTP](https://img.shields.io/badge/HTTP-FF6F00?style=for-the-badge&logo=mozilla&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTTP) 
+[![NTP](https://img.shields.io/badge/NTP-228B22?style=for-the-badge&logo=internet-explorer&logoColor=white)](https://www.ntp.org/) 
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/) 
+[![JDBC](https://img.shields.io/badge/JDBC%20Connector-CC0000?style=for-the-badge&logo=java&logoColor=white)](https://dev.mysql.com/downloads/connector/j/) 
+[![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipseide&logoColor=white)](https://www.eclipse.org/) 
+[![NetBeans](https://img.shields.io/badge/NetBeans-1B6AC6?style=for-the-badge&logo=apachenetbeanside&logoColor=white)](https://netbeans.apache.org/) 
 
 
 ### 🔧 Yêu cầu hệ thống
