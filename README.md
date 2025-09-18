@@ -4,7 +4,7 @@
     </a>
 </h2>
 <h2 align="center">
-   ỨNG DỤNG TRẮC NHIỆM TRỰC TUYẾN
+   ỨNG DỤNG TRẮC NGHIỆM TRỰC TUYẾN
 </h2>
 <div align="center">
     <p align="center">
@@ -20,17 +20,75 @@
 </div>
 
 ## 📖 1. Giới thiệu
-Ứng dụng Trắc nghiệm trực tuyến Client–Server được phát triển bằng Java, dựa trên giao thức TCP để đảm bảo việc trao đổi dữ liệu tin cậy và chính xác. Hệ thống cho phép sinh viên/kỹ thuật viên kết nối tới server, thực hiện làm bài trắc nghiệm, và nhận kết quả ngay sau khi hoàn thành.
+Ứng dụng Trắc nghiệm trực tuyến Client–Server được phát triển bằng Java, dựa trên giao thức TCP nhằm đảm bảo việc trao đổi dữ liệu tin cậy và chính xác. Hệ thống cho phép sinh viên/kỹ thuật viên kết nối tới server, thực hiện làm bài trắc nghiệm và nhận kết quả ngay sau khi hoàn thành.
 
-Các chức năng chính:
+Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực tuyến:
 
-Client kết nối đến server qua địa chỉ IP và port (mặc định: 5000). Server hỗ trợ nhiều client đồng thời thông qua cơ chế đa luồng, và yêu cầu người dùng nhập tên để xác định danh tính.
+📌 Client kết nối đến server:
 
-Gửi và nhận câu hỏi – đáp án: Server gửi các câu hỏi trắc nghiệm đến client. Người dùng chọn đáp án, gửi về server; server kiểm tra và phản hồi kết quả đúng/sai theo thời gian thực.
+Kết nối qua địa chỉ IP và port (mặc định: 5000).
 
-Server lưu trữ kết quả sinh viên và hiển thị IP + điểm số trên GUI admin.
+Server hỗ trợ nhiều client đồng thời thông qua cơ chế đa luồng.
 
-Client GUI đẹp, scroll mượt, submit disable sau khi nộp, hiển thị điểm số cuối cùng.
+Yêu cầu người dùng nhập tên để xác định danh tính.
+
+📌 Gửi và nhận câu hỏi – đáp án:
+
+Server gửi các câu hỏi trắc nghiệm đến client.
+
+Người dùng chọn đáp án và gửi về server.
+
+Server kiểm tra và phản hồi kết quả đúng/sai theo thời gian thực.
+
+📌 Quản lý kết quả:
+
+Server lưu trữ điểm số của từng sinh viên vào cơ sở dữ liệu MySQL.
+
+GUI admin hiển thị IP và điểm số theo thời gian thực.
+
+📌 Client GUI trực quan:
+
+Giao diện đẹp, scroll mượt, thân thiện với người dùng.
+
+Nút submit sẽ disable sau khi nộp bài.
+
+Hiển thị điểm số cuối cùng ngay trên client.
+
+🔹 Ý nghĩa ứng dụng:
+Hệ thống giúp sinh viên và nhà phát triển:
+
+Hiểu cơ chế Client–Server và truyền nhận dữ liệu tin cậy qua TCP.
+
+Thực hành triển khai ứng dụng Java đa luồng.
+
+Rèn luyện kỹ năng thiết kế GUI và lưu trữ dữ liệu MySQL.
+
+Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến và phân tích kết quả học tập.
+
+
+## 🔧 2. Công nghệ sử dụng  
+
+[![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html) 
+[![Swing](https://img.shields.io/badge/Java%20Swing-007396?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/) 
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/) 
+[![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipseide&logoColor=white)](https://www.eclipse.org/) 
+
+
+### 🔧 Yêu cầu hệ thống
+
+Java Development Kit (JDK): Phiên bản 8 trở lên
+
+Hệ điều hành: Windows, macOS, hoặc Linux
+
+Môi trường phát triển: IDE (IntelliJ IDEA, Eclipse, VS Code) hoặc terminal/command prompt
+
+Bộ nhớ: Tối thiểu 512MB RAM
+
+Dung lượng: Khoảng 10MB cho mã nguồn và file thực thi
+
+Mạng: Kết nối TCP/IP giữa client và server
+
+## 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
   <img src="docs/anhGiaoDien.jpg" alt="Ảnh 1" width="800"/>
@@ -55,29 +113,7 @@ Client GUI đẹp, scroll mượt, submit disable sau khi nộp, hiển thị đ
   <em> Hình 3: Kết quả sau khi làm </em>
 </p>
 
-## 🔧 2. Công nghệ sử dụng  
-
-[![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html) 
-[![Swing](https://img.shields.io/badge/Java%20Swing-007396?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/) 
-[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/) 
-[![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipseide&logoColor=white)](https://www.eclipse.org/) 
-
-
-### 🔧 Yêu cầu hệ thống
-
-Java Development Kit (JDK): Phiên bản 8 trở lên
-
-Hệ điều hành: Windows, macOS, hoặc Linux
-
-Môi trường phát triển: IDE (IntelliJ IDEA, Eclipse, VS Code) hoặc terminal/command prompt
-
-Bộ nhớ: Tối thiểu 512MB RAM
-
-Dung lượng: Khoảng 10MB cho mã nguồn và file thực thi
-
-Mạng: Kết nối TCP/IP giữa client và server
-
-### 4. 📦 Cài đặt và triển khai
+### 📦 4. Cài đặt và triển khai
 **Bước 1: Chuẩn Bị Môi Trường**
 
 Kiểm tra Java:
@@ -162,29 +198,13 @@ Nhập Tên sinh viên → bấm Start để nhận câu hỏi.
 
 Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
 
-### 5. 🚀 Sử dụng ứng dụng
+## 🔧 5. Liên hệ ( cá nhân )
 
-Kết nối: Nhập Tên sinh viên → bấm Start → client kết nối tới server và nhận câu hỏi.
-
-Làm bài: Chọn đáp án cho từng câu hỏi. Scroll để xem tất cả câu hỏi nếu nhiều câu.
-
-Nộp bài: Nhấn Nộp bài → điểm số hiển thị trên client. Nút Nộp bài bị disable sau khi submit.
-
-Xem kết quả: Trên server, GUI ResultsViewerSwing hiển thị danh sách sinh viên, IP và điểm số realtime. Điểm 100% được highlight màu xanh.
-
-Ngắt kết nối: Đóng cửa sổ client hoặc mất mạng sẽ tự động ngắt kết nối.
-
-## 🔧 6. Ghi chú
-Server fetch câu hỏi trực tiếp từ bảng questions trong MySQL.
-
-Client và server giao tiếp qua TCP/IP, port mặc định 5000.
-
-Kết quả luôn được lưu trong danh sách results realtime trên server GUI.
-
-Có thể mở nhiều client cùng lúc để kiểm tra kết quả đồng thời.
 ## 👜Thông tin cá nhân
 **Họ tên**: Khổng Minh Hoài
+
 **Lớp**: CNTT 16-04
+
 **Email**: khonghoai.15052004@gmail.com
 
 © 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
