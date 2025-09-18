@@ -65,7 +65,7 @@ Java Swing: Xây dựng giao diện GUI cho client và server.
 
 TCP Socket: Giao thức truyền dữ liệu tin cậy giữa client và server.
 
-JSON (org.json): Xử lý dữ liệu câu hỏi từ API Mock.
+MySQL: Lưu trữ câu hỏi (questions) và kết quả (results) của sinh viên.
 
 Multi-threading: Cho phép server phục vụ nhiều client đồng thời.
 
@@ -109,13 +109,43 @@ javac -version
 
 Đảm bảo hiển thị Java 8 trở lên.
 
+Cài đặt MySQL/MariaDB và tạo cơ sở dữ liệu:
+
+CREATE DATABASE BTLQuiz;
+USE BTLQuiz;
+
+-- Tạo bảng questions
+CREATE TABLE questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content TEXT NOT NULL,
+    option1 VARCHAR(255),
+    option2 VARCHAR(255),
+    option3 VARCHAR(255),
+    option4 VARCHAR(255),
+    answerIndex INT
+);
+
+-- Tạo bảng results
+CREATE TABLE results (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    score INT,
+    ip VARCHAR(50),
+    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 Tải mã nguồn:
 Sao chép thư mục UngDungTracNghiem_TCP chứa các file:
 
 QuizServer.java
+
 QuizClient.java
+
 QuizClientSwing.java
+
 Question.java
+
 ResultsViewerSwing.java
 
 Bước 2: Biên dịch mã nguồn
@@ -139,7 +169,9 @@ javac quiz/ResultsViewerSwing.java
 Kết quả: các file .class tương ứng sẽ được tạo ra trong thư mục quiz.
 
 Bước 3: Chạy ứng dụng
+
 Khởi động Server
+
 java quiz.QuizServer
 
 
@@ -150,6 +182,7 @@ Console hiển thị log khi có client kết nối.
 Server tạo GUI admin ResultsViewerSwing để hiển thị kết quả realtime.
 
 Khởi động Client
+
 java quiz.QuizClient
 
 
@@ -161,34 +194,18 @@ Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
 
 ### 5. 🚀 Sử dụng ứng dụng
 
+Kết nối: Nhập Tên sinh viên → bấm Start → client kết nối tới server và nhận câu hỏi.
 
-Kết nối:
-Nhập Tên sinh viên → bấm Start → client kết nối tới server và nhận câu hỏi.
+Làm bài: Chọn đáp án cho từng câu hỏi. Scroll để xem tất cả câu hỏi nếu nhiều câu.
 
-Làm bài:
+Nộp bài: Nhấn Nộp bài → điểm số hiển thị trên client. Nút Nộp bài bị disable sau khi submit.
 
-Chọn đáp án cho từng câu hỏi.
+Xem kết quả: Trên server, GUI ResultsViewerSwing hiển thị danh sách sinh viên, IP và điểm số realtime. Điểm 100% được highlight màu xanh.
 
-Scroll để xem tất cả câu hỏi nếu nhiều câu.
-
-Nộp bài:
-
-Nhấn Nộp bài → điểm số hiển thị trên client.
-
-Nút Nộp bài bị disable sau khi submit.
-
-Xem kết quả:
-
-Trên server, GUI ResultsViewerSwing hiển thị danh sách sinh viên, IP và điểm số realtime.
-
-Điểm 100% được highlight màu xanh.
-
-Ngắt kết nối:
-
-Đóng cửa sổ client hoặc mất mạng sẽ tự động ngắt kết nối.
+Ngắt kết nối: Đóng cửa sổ client hoặc mất mạng sẽ tự động ngắt kết nối.
 
 ## 🔧 6. Ghi chú
-Server fetch câu hỏi từ MockAPI (https://68cb54b1430c4476c34c8db1.mockapi.io/questions).
+Server fetch câu hỏi trực tiếp từ bảng questions trong MySQL.
 
 Client và server giao tiếp qua TCP/IP, port mặc định 5000.
 
