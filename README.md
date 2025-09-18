@@ -147,6 +147,7 @@ CREATE TABLE results (
 
 
 **Bước 2: Biên Dịch Mã Nguồn**
+
 Mở terminal, điều hướng vào thư mục UngDungTracNghiem_TCP.
 
 Biên dịch toàn bộ file:
@@ -185,6 +186,7 @@ java quiz.QuizClient
 
 
 ---
+
 
 
 
