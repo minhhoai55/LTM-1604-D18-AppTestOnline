@@ -85,7 +85,7 @@ Dung lượng: Khoảng 10MB cho mã nguồn và file thực thi
 Mạng: Kết nối TCP/IP giữa client và server
 
 ### 4. 📦 Cài đặt và triển khai
-**Bước 1: Chuẩn Bị Môi Trường
+**Bước 1: Chuẩn Bị Môi Trường**
 Kiểm tra Java:
 
 java -version
@@ -197,3 +197,4 @@ Có thể mở nhiều client cùng lúc để kiểm tra kết quả đồng th
 
 
 ---
+
