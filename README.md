@@ -74,20 +74,6 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 [![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipseide&logoColor=white)](https://www.eclipse.org/) 
 
 
-### 🔧 Yêu cầu hệ thống
-
-Java Development Kit (JDK): Phiên bản 8 trở lên
-
-Hệ điều hành: Windows, macOS, hoặc Linux
-
-Môi trường phát triển: IDE (IntelliJ IDEA, Eclipse, VS Code) hoặc terminal/command prompt
-
-Bộ nhớ: Tối thiểu 512MB RAM
-
-Dung lượng: Khoảng 10MB cho mã nguồn và file thực thi
-
-Mạng: Kết nối TCP/IP giữa client và server
-
 ## 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
@@ -231,6 +217,7 @@ Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
 
 
 ---
+
 
 
 
