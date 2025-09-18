@@ -74,6 +74,15 @@ Object Serialization: Truyền các đối tượng Java (Question, danh sách c
 JScrollPane: Hiển thị câu hỏi nhiều dòng và scroll mượt trên client.
 
 JList + DefaultListModel: Hiển thị kết quả realtime trên server.
+SQL
+<p align="center">
+  <img src="docs/bangsql.png" alt="Ảnh 3" width="500"/>
+ 
+</p>
+<p align="center">
+  <em> Sql lưu trữ câu hỏi  </em>
+</p>
+
 
 ### 🔧 Yêu cầu hệ thống
 
