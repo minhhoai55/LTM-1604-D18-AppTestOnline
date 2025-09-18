@@ -119,6 +119,7 @@ Mạng: Kết nối TCP/IP giữa client và server
 Kiểm tra Java:
 
 java -version
+
 javac -version
 
 
@@ -127,31 +128,50 @@ javac -version
 Cài đặt MySQL/MariaDB và tạo cơ sở dữ liệu:
 
 CREATE DATABASE BTLQuiz;
+
 USE BTLQuiz;
 
 -- Tạo bảng questions
 CREATE TABLE questions (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
+    
     content TEXT NOT NULL,
+    
     option1 VARCHAR(255),
+    
     option2 VARCHAR(255),
+    
     option3 VARCHAR(255),
+    
     option4 VARCHAR(255),
+    
     answerIndex INT
+    
 );
 
 -- Tạo bảng results
+
+
 CREATE TABLE results (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
+    
     name VARCHAR(255),
+    
     score INT,
+    
     ip VARCHAR(50),
+    
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    
 );
 
 
 Tải mã nguồn:
+
 Sao chép thư mục UngDungTracNghiem_TCP chứa các file:
+
 QuizServer.java, QuizClient.java, QuizClientSwing.java, Question.java, ResultsViewerSwing.java.
 
 **Bước 2: Biên Dịch Mã Nguồn**
@@ -211,5 +231,6 @@ Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
 
 
 ---
+
 
 
