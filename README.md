@@ -85,8 +85,7 @@ Dung lượng: Khoảng 10MB cho mã nguồn và file thực thi
 Mạng: Kết nối TCP/IP giữa client và server
 
 ### 4. 📦 Cài đặt và triển khai
-Bước 1: Chuẩn bị môi trường
-
+**Bước 1: Chuẩn Bị Môi Trường
 Kiểm tra Java:
 
 java -version
@@ -123,19 +122,10 @@ CREATE TABLE results (
 
 Tải mã nguồn:
 Sao chép thư mục UngDungTracNghiem_TCP chứa các file:
+QuizServer.java, QuizClient.java, QuizClientSwing.java, Question.java, ResultsViewerSwing.java.
 
-QuizServer.java
-
-QuizClient.java
-
-QuizClientSwing.java
-
-Question.java
-
-ResultsViewerSwing.java
-
-Bước 2: Biên dịch mã nguồn
-
+**Bước 2: Biên Dịch Mã Nguồn
+**
 Mở terminal và điều hướng đến thư mục chứa mã nguồn.
 
 Biên dịch tất cả file:
@@ -154,20 +144,20 @@ javac quiz/ResultsViewerSwing.java
 
 Kết quả: các file .class tương ứng sẽ được tạo ra trong thư mục quiz.
 
-Bước 3: Chạy ứng dụng
-
-Khởi động Server
+**Bước 3: Chạy Ứng Dụng
+**
+Khởi động Server:
 
 java quiz.QuizServer
 
 
-Server sẽ khởi động port mặc định 5000.
+Server sẽ khởi động ở port mặc định 5000.
 
 Console hiển thị log khi có client kết nối.
 
 Server tạo GUI admin ResultsViewerSwing để hiển thị kết quả realtime.
 
-Khởi động Client
+Khởi động Client:
 
 java quiz.QuizClient
 
@@ -204,5 +194,6 @@ Có thể mở nhiều client cùng lúc để kiểm tra kết quả đồng th
 **Email**: khonghoai.15052004@gmail.com
 
 © 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+
 
 ---
