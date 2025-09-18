@@ -77,27 +77,27 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 ## 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
-  <img src="docs/anhGiaoDien.jpg" alt="Ảnh 1" width="800"/>
+  <img src="docs/anhGiaoDien.jpg" alt="Ảnh 1" width="100%"/>
 </p>
 
 <p align="center">
-  <em>Hình 1: Giao diện khi vào ứng dụng  </em>
+  <em>Hình 1: Giao diện khi vào ứng dụng</em>
 </p>
 
 <p align="center">
-  <img src="docs/bangsql.png" alt="Ảnh 3" width="500"/>
- 
+  <img src="docs/bangsql.png" alt="Ảnh 2" width="100%"/>
 </p>
 <p align="center">
-  <em> Sql lưu trữ câu hỏi  </em>
+  <em>Hình 2: SQL lưu trữ câu hỏi</em>
 </p>
 
 <p align="center">
-    <img src="docs/ketquasaukhixg.png" alt="Ảnh 4" width="450"/>
+  <img src="docs/ketquasaukhixong.png" alt="Ảnh 3" width="100%"/>
 </p>
 <p align="center">
-  <em> Hình 3: Kết quả sau khi làm </em>
+  <em>Hình 3: Kết quả sau khi làm</em>
 </p>
+
 
 ### 📦 4. Cài đặt và triển khai
 **Bước 1: Chuẩn Bị Môi Trường**
