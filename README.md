@@ -20,16 +20,155 @@
 </div>
 
 ## 📖 1. Giới thiệu
-Học phần trang bị cho người học những kiến thức nền tảng của lập trình mạng và các kỹ năng cần thiết để thiết kế và cài đặt các ứng dụng mạng và các chuẩn ở mức ứng dụng dựa trên mô hình Client/Server, có sử dụng các giao tiếp chương trình dựa trên Sockets. Kết thúc học phần, sinh viên có thể viết các chương trình ứng dụng mạng với giao thức tầng ứng dụng tự thiết kế.
+Ứng dụng Trắc nghiệm trực tuyến Client–Server được phát triển bằng Java, dựa trên giao thức TCP để đảm bảo việc trao đổi dữ liệu tin cậy và chính xác. Hệ thống cho phép sinh viên/kỹ thuật viên kết nối tới server, thực hiện làm bài trắc nghiệm, và nhận kết quả ngay sau khi hoàn thành.
 
-## 🔧 2. Ngôn ngữ lập trình sử dụng: [![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)](https://www.java.com/)
+Các chức năng chính:
 
-## 🚀 3. Các project đã thực hiện
+Client kết nối đến server qua địa chỉ IP và port (mặc định: 5000). Server hỗ trợ nhiều client đồng thời thông qua cơ chế đa luồng, và yêu cầu người dùng nhập tên để xác định danh tính.
 
-### [Khoá 16](./docs/projects/K16/README.md)
+Gửi và nhận câu hỏi – đáp án: Server gửi các câu hỏi trắc nghiệm đến client. Người dùng chọn đáp án, gửi về server; server kiểm tra và phản hồi kết quả đúng/sai theo thời gian thực.
 
-## 📝 4. License
+Server lưu trữ kết quả sinh viên và hiển thị IP + điểm số trên GUI admin.
 
-© 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+Client GUI đẹp, scroll mượt, submit disable sau khi nộp, hiển thị điểm số cuối cùng.
 
----
+<p align="center">
+  <img src="docs/anhGiaoDien.jpg" alt="Ảnh 1" width="800"/>
+</p>
+
+<p align="center">
+  <em>Hình 1: Giao diện khi vào ứng dụng  </em>
+</p>
+
+
+## 🔧 2. Công nghệ sử dụng  
+
+Các công nghệ được sử dụng để xây dựng ứng dụng Client–Server TCP với Java Swing:
+
+Java SE 8+: Ngôn ngữ lập trình chính và thư viện chuẩn.
+
+Java Swing: Xây dựng giao diện GUI cho client và server.
+
+TCP Socket: Giao thức truyền dữ liệu tin cậy giữa client và server.
+
+JSON (org.json): Xử lý dữ liệu câu hỏi từ API Mock.
+
+Multi-threading: Cho phép server phục vụ nhiều client đồng thời.
+
+Object Serialization: Truyền các đối tượng Java (Question, danh sách câu trả lời) qua mạng.
+
+JScrollPane: Hiển thị câu hỏi nhiều dòng và scroll mượt trên client.
+
+JList + DefaultListModel: Hiển thị kết quả realtime trên server.
+
+### 🔧 Yêu cầu hệ thống
+
+Java Development Kit (JDK): Phiên bản 8 trở lên
+
+Hệ điều hành: Windows, macOS, hoặc Linux
+
+Môi trường phát triển: IDE (IntelliJ IDEA, Eclipse, VS Code) hoặc terminal/command prompt
+
+Bộ nhớ: Tối thiểu 512MB RAM
+
+Dung lượng: Khoảng 10MB cho mã nguồn và file thực thi
+
+Mạng: Kết nối TCP/IP giữa client và server
+
+### 4. 📦 Cài đặt và triển khai
+Bước 1: Chuẩn bị môi trường
+
+Kiểm tra Java:
+
+java -version
+javac -version
+
+
+Đảm bảo hiển thị Java 8 trở lên.
+
+Tải mã nguồn:
+Sao chép thư mục UngDungTracNghiem_TCP chứa các file:
+
+QuizServer.java
+QuizClient.java
+QuizClientSwing.java
+Question.java
+ResultsViewerSwing.java
+
+Bước 2: Biên dịch mã nguồn
+
+Mở terminal và điều hướng đến thư mục chứa mã nguồn.
+
+Biên dịch tất cả file:
+
+javac quiz/*.java
+
+
+Hoặc biên dịch từng file:
+
+javac quiz/QuizServer.java
+javac quiz/QuizClient.java
+javac quiz/QuizClientSwing.java
+javac quiz/Question.java
+javac quiz/ResultsViewerSwing.java
+
+
+Kết quả: các file .class tương ứng sẽ được tạo ra trong thư mục quiz.
+
+Bước 3: Chạy ứng dụng
+Khởi động Server
+java quiz.QuizServer
+
+
+Server sẽ khởi động port mặc định 5000.
+
+Console hiển thị log khi có client kết nối.
+
+Server tạo GUI admin ResultsViewerSwing để hiển thị kết quả realtime.
+
+Khởi động Client
+java quiz.QuizClient
+
+
+Mỗi client mở trong cửa sổ riêng (GUI Swing).
+
+Nhập Tên sinh viên → bấm Start để nhận câu hỏi.
+
+Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
+
+### 5. 🚀 Sử dụng ứng dụng
+
+
+Kết nối:
+Nhập Tên sinh viên → bấm Start → client kết nối tới server và nhận câu hỏi.
+
+Làm bài:
+
+Chọn đáp án cho từng câu hỏi.
+
+Scroll để xem tất cả câu hỏi nếu nhiều câu.
+
+Nộp bài:
+
+Nhấn Nộp bài → điểm số hiển thị trên client.
+
+Nút Nộp bài bị disable sau khi submit.
+
+Xem kết quả:
+
+Trên server, GUI ResultsViewerSwing hiển thị danh sách sinh viên, IP và điểm số realtime.
+
+Điểm 100% được highlight màu xanh.
+
+Ngắt kết nối:
+
+Đóng cửa sổ client hoặc mất mạng sẽ tự động ngắt kết nối.
+
+## 🔧 6. Ghi chú
+Server fetch câu hỏi từ MockAPI (https://68cb54b1430c4476c34c8db1.mockapi.io/questions).
+
+Client và server giao tiếp qua TCP/IP, port mặc định 5000.
+
+Kết quả luôn được lưu trong danh sách results realtime trên server GUI.
+
+Có thể mở nhiều client cùng lúc để kiểm tra kết quả đồng thời.
