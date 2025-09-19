@@ -106,7 +106,7 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 
     Cài đặt MySQL 8.x + Workbench 🗄️.
 
-    Tạo database udp_time
+    Tạo database BTLQuiz
 🗄️ Bước 2. Tạo bảng trong MySQL
 
 📦 Bước 3. Thêm thư viện JDBC
@@ -119,7 +119,7 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
     Trong DbHelper.java:
 
     public class DbHelper {
-        private static final String URL = "jdbc:mysql://localhost:3306/udp_time";
+        private static final String URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
         private static final String USER = "root";
         private static final String PASS = "your_password";
 
@@ -130,16 +130,30 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 
 ▶️ Bước 5. Chạy hệ thống
 
-    Chạy TimeServerGUI.java → nhấn Start Server 🟢.
+    Chạy QuizServer.java → nhấn Start Server 🟢.
 
-    Chạy TimeClientGUI.java → nhập IP Server → nhấn Run 🚀.
+Server sẽ chạy trên port 5000
 
-    Quan sát Bảng kết quả, Biểu đồ, Đồng hồ.
+Giao diện xem kết quả sẽ hiển thị tự động
+
+    Chạy QuizClient.java → nhấn Run 🚀.
+
+Client sẽ kết nối tới localhost:5000
+
+Giao diện làm bài thi sẽ hiển thị    
+
+Nhập tên sinh viên
+
+Chọn đáp án cho từng câu hỏi
+
+Nhấn "Nộp bài thi"
+
+Xem kết quả và các đáp án đúng/sai
 
     Kiểm tra dữ liệu trong MySQL Workbench:
 
-        SELECT * FROM runs ORDER BY id DESC;
-        SELECT * FROM samples WHERE run_id = <id>;
+        SELECT * FROM questions;
+        SELECT * FROM results;
         
 ## 🔧 5. Liên hệ ( cá nhân )
 
