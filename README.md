@@ -77,7 +77,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 ## 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
-  <img src="docs/anhGiaoDien.png" alt="Ảnh 1" width="100%"/>
+  <img src="docs/AnhGiaoDien.png" alt="Ảnh 1" width="100%"/>
 </p>
 
 <p align="center">
