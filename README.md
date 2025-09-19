@@ -26,44 +26,44 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 
 📌 Client kết nối đến server:
 
-Kết nối qua địa chỉ IP và port (mặc định: 5000).
+    Kết nối qua địa chỉ IP và port (mặc định: 5000).
 
-Server hỗ trợ nhiều client đồng thời thông qua cơ chế đa luồng.
+    Server hỗ trợ nhiều client đồng thời thông qua cơ chế đa luồng.
 
-Yêu cầu người dùng nhập tên để xác định danh tính.
+    Yêu cầu người dùng nhập tên để xác định danh tính.
 
 📌 Gửi và nhận câu hỏi – đáp án:
 
-Server gửi các câu hỏi trắc nghiệm đến client.
+    Server gửi các câu hỏi trắc nghiệm đến client.
 
-Người dùng chọn đáp án và gửi về server.
+    Người dùng chọn đáp án và gửi về server.
 
-Server kiểm tra và phản hồi kết quả đúng/sai theo thời gian thực.
+    Server kiểm tra và phản hồi kết quả đúng/sai theo thời gian thực.
 
 📌 Quản lý kết quả:
 
-Server lưu trữ điểm số của từng sinh viên vào cơ sở dữ liệu MySQL.
+    Server lưu trữ điểm số của từng sinh viên vào cơ sở dữ liệu MySQL.
 
-GUI admin hiển thị IP và điểm số theo thời gian thực.
+    GUI admin hiển thị IP và điểm số theo thời gian thực.
 
 📌 Client GUI trực quan:
 
-Giao diện đẹp, scroll mượt, thân thiện với người dùng.
+    Giao diện đẹp, scroll mượt, thân thiện với người dùng.
 
-Nút submit sẽ disable sau khi nộp bài.
+    Nút submit sẽ disable sau khi nộp bài.
 
-Hiển thị điểm số cuối cùng ngay trên client.
+    Hiển thị điểm số cuối cùng ngay trên client.
 
 🔹 Ý nghĩa ứng dụng:
-Hệ thống giúp sinh viên và nhà phát triển:
+    Hệ thống giúp sinh viên và nhà phát triển:
 
-Hiểu cơ chế Client–Server và truyền nhận dữ liệu tin cậy qua TCP.
+    Hiểu cơ chế Client–Server và truyền nhận dữ liệu tin cậy qua TCP.
 
-Thực hành triển khai ứng dụng Java đa luồng.
+    Thực hành triển khai ứng dụng Java đa luồng.
 
-Rèn luyện kỹ năng thiết kế GUI và lưu trữ dữ liệu MySQL.
+    Rèn luyện kỹ năng thiết kế GUI và lưu trữ dữ liệu MySQL.
 
-Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến và phân tích kết quả học tập.
+    Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến và phân tích kết quả học tập.
 
 
 ## 🔧 2. Công nghệ sử dụng  
