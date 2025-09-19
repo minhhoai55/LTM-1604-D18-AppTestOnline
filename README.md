@@ -100,77 +100,81 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 
 
 ### 📦 4. Cài đặt và triển khai
-**Bước 1: Chuẩn Bị Môi Trường**
+🔧 Bước 1. Chuẩn bị môi trường
 
-Cài đặt JDK 8+ ☕.
+Cài đặt JDK 8 hoặc cao hơn ☕
+Cài đặt MySQL 8.x + MySQL Workbench 🗄️
+IDE: Eclipse, NetBeans, hoặc IntelliJ IDEA
 
-Cài đặt MySQL/MariaDB 🗄️.
+🗄️ Bước 2. Tạo database và bảng
 
-Tạo cơ sở dữ liệu và bảng:
+Tạo database:
 
-CREATE DATABASE BTLQuiz;
-
+sqlCREATE DATABASE BTLQuiz;
 USE BTLQuiz;
 
+Tạo các bảng:
+
+sql-- Bảng câu hỏi
 CREATE TABLE questions (
-
     id INT AUTO_INCREMENT PRIMARY KEY,
-
     content TEXT NOT NULL,
-
-    option1 VARCHAR(255),
-
-    option2 VARCHAR(255),
-
-    option3 VARCHAR(255),
-
-    option4 VARCHAR(255),
-
-    answerIndex INT
-
+    option1 VARCHAR(255) NOT NULL,
+    option2 VARCHAR(255) NOT NULL,
+    option3 VARCHAR(255) NOT NULL,
+    option4 VARCHAR(255) NOT NULL,
+    answerIndex INT NOT NULL
 );
 
+-- Bảng kết quả
 CREATE TABLE results (
-
     id INT AUTO_INCREMENT PRIMARY KEY,
-
-    name VARCHAR(255),
-
-    score INT,
-
-    ip VARCHAR(50),
-
+    name VARCHAR(255) NOT NULL,
+    score INT NOT NULL,
+    ip VARCHAR(45) NOT NULL,
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    
 );
 
+Thêm dữ liệu mẫu:
 
+sqlINSERT INTO questions (content, option1, option2, option3, option4, answerIndex) VALUES
+('Java là ngôn ngữ lập trình gì?', 'Thông dịch', 'Biên dịch', 'Cả hai', 'Không phải cả hai', 2),
+('Phương thức main trong Java có signature như thế nào?', 'public static void main(String args[])', 'static public void main(String args[])', 'public void main(String args[])', 'Cả A và B đúng', 3),
+('Từ khóa nào dùng để kế thừa trong Java?', 'implements', 'extends', 'inherits', 'super', 1);
+📦 Bước 3. Thêm thư viện JDBC
 
-**Bước 2: Biên Dịch Mã Nguồn**
+Tải mysql-connector-j-8.x.x.jar từ trang chủ MySQL
+Thêm vào classpath của project
 
-Mở terminal, điều hướng vào thư mục UngDungTracNghiem_TCP.
-
-Biên dịch toàn bộ file:
-
-javac quiz/*.java
-
-
-**Bước 3: Chạy Ứng Dụng**
+⚙️ Bước 4. Cấu hình kết nối database
+Trong QuizServer.java, cập nhật thông tin kết nối:
+javaprivate static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
+private static final String DB_USER = "root";
+private static final String DB_PASS = "your_password"; // Thay bằng mật khẩu MySQL của bạn
+▶️ Bước 5. Chạy hệ thống
 
 Khởi động Server:
 
-java quiz.QuizServer
+bash   java quiz.QuizServer
+
+Server sẽ chạy trên port 5000
+Giao diện xem kết quả sẽ hiển thị tự động
 
 
-👉 Server chạy port 5000, hiển thị log kết nối, mở GUI admin ResultsViewerSwing.
+Chạy Client:
 
-Khởi động Client:
+bash   java quiz.QuizClient
+
+Client sẽ kết nối tới localhost:5000
+Giao diện làm bài thi sẽ hiển thị
 
 
-java quiz.QuizClient
+Làm bài thi:
 
-👉 Mỗi client mở trong cửa sổ riêng, nhập tên → Start → làm bài → nhận điểm số cuối cùng.
-
+Nhập tên sinh viên
+Chọn đáp án cho từng câu hỏi
+Nhấn "Nộp bài thi"
+Xem kết quả và các đáp án đúng/sai
 
 
 ## 🔧 5. Liên hệ ( cá nhân )
