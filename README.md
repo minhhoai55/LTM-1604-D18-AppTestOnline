@@ -99,73 +99,48 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 </p>
 
 
-### 📦 4. Cài đặt và triển khai
+## 4. Các bước cài đặt
+🔧 Bước 1. Chuẩn bị môi trường
 
-🔧 **Bước 1. Chuẩn bị môi trường**  
-- Cài đặt JDK 8 hoặc cao hơn ☕  
-- Cài đặt MySQL 8.x + MySQL Workbench 🗄️  
-- IDE: Eclipse, NetBeans, hoặc IntelliJ IDEA  
+    Cài đặt JDK 8 hoặc 11 ☕.
 
----
+    Cài đặt MySQL 8.x + Workbench 🗄️.
 
-🗄️ **Bước 2. Tạo database và bảng**
-📌 Tạo Database:
-CREATE DATABASE BTLQuiz;
-USE BTLQuiz;
+    Tạo database udp_time
+🗄️ Bước 2. Tạo bảng trong MySQL
 
-📌 Tạo các bảng:
--- Bảng câu hỏi
-CREATE TABLE questions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    content TEXT NOT NULL,
-    option1 VARCHAR(255) NOT NULL,
-    option2 VARCHAR(255) NOT NULL,
-    option3 VARCHAR(255) NOT NULL,
-    option4 VARCHAR(255) NOT NULL,
-    answerIndex INT NOT NULL
-);
+📦 Bước 3. Thêm thư viện JDBC
 
--- Bảng kết quả
-CREATE TABLE results (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    score INT NOT NULL,
-    ip VARCHAR(45) NOT NULL,
-    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    Tải mysql-connector-j-8.x.x.jar.
 
-📌 Thêm dữ liệu mẫu:
-INSERT INTO questions (content, option1, option2, option3, option4, answerIndex) VALUES
-('Java là ngôn ngữ lập trình gì?', 'Thông dịch', 'Biên dịch', 'Cả hai', 'Không phải cả hai', 2),
-('Phương thức main trong Java có signature như thế nào?', 'public static void main(String args[])', 
- 'Từ khóa nào dùng để kế thừa trong Java?', 'implements', 'extends', 'inherits', 'super', 1);
+    Copy vào thư mục lib/ của project → Add to Build Path.
+⚙️ Bước 4. Cấu hình kết nối
 
-📌 Bước 3. Thêm thư viện JDBC
+    Trong DbHelper.java:
 
-Tải mysql-connector-j-8.x.x.jar từ trang chủ MySQL.
+    public class DbHelper {
+        private static final String URL = "jdbc:mysql://localhost:3306/udp_time";
+        private static final String USER = "root";
+        private static final String PASS = "your_password";
 
-Thêm vào classpath của project.
+        public static Connection open() throws Exception {
+            return DriverManager.getConnection(URL, USER, PASS);
+        }
+    }
 
-📌 Bước 4. Cấu hình kết nối Database
+▶️ Bước 5. Chạy hệ thống
 
-Trong QuizServer.java, cập nhật thông tin kết nối:
+    Chạy TimeServerGUI.java → nhấn Start Server 🟢.
 
-private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
-private static final String DB_USER = "root";
-private static final String DB_PASS = "your_password"; // Thay bằng mật khẩu MySQL của bạn
+    Chạy TimeClientGUI.java → nhập IP Server → nhấn Run 🚀.
 
-📌 Bước 5. Chạy hệ thống
+    Quan sát Bảng kết quả, Biểu đồ, Đồng hồ.
 
-Chạy Server
+    Kiểm tra dữ liệu trong MySQL Workbench:
 
-java quiz.QuizServer
-
-
-Server sẽ chạy trên port 5000.
-
-Chạy Client
-
-java quiz.QuizClient
+        SELECT * FROM runs ORDER BY id DESC;
+        SELECT * FROM samples WHERE run_id = <id>;
+        
 ## 🔧 5. Liên hệ ( cá nhân )
 
 ## 👜Thông tin cá nhân
