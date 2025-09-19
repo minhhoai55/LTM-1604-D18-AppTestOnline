@@ -100,22 +100,24 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 
 
 ### 📦 4. Cài đặt và triển khai
-🔧 Bước 1. Chuẩn bị môi trường
 
-Cài đặt JDK 8 hoặc cao hơn ☕
-Cài đặt MySQL 8.x + MySQL Workbench 🗄️
-IDE: Eclipse, NetBeans, hoặc IntelliJ IDEA
+🔧 **Bước 1. Chuẩn bị môi trường**  
+- Cài đặt JDK 8 hoặc cao hơn ☕  
+- Cài đặt MySQL 8.x + MySQL Workbench 🗄️  
+- IDE: Eclipse, NetBeans, hoặc IntelliJ IDEA  
 
-🗄️ Bước 2. Tạo database và bảng
+---
 
-Tạo database:
+🗄️ **Bước 2. Tạo database và bảng**
 
-sqlCREATE DATABASE BTLQuiz;
+**Tạo database:**
+```sql
+CREATE DATABASE BTLQuiz;
 USE BTLQuiz;
-
 Tạo các bảng:
 
-sql-- Bảng câu hỏi
+sql
+-- Bảng câu hỏi
 CREATE TABLE questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     content TEXT NOT NULL,
@@ -134,49 +136,54 @@ CREATE TABLE results (
     ip VARCHAR(45) NOT NULL,
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 Thêm dữ liệu mẫu:
 
-sqlINSERT INTO questions (content, option1, option2, option3, option4, answerIndex) VALUES
+sql
+INSERT INTO questions (content, option1, option2, option3, option4, answerIndex) VALUES
 ('Java là ngôn ngữ lập trình gì?', 'Thông dịch', 'Biên dịch', 'Cả hai', 'Không phải cả hai', 2),
 ('Phương thức main trong Java có signature như thế nào?', 'public static void main(String args[])', 'static public void main(String args[])', 'public void main(String args[])', 'Cả A và B đúng', 3),
 ('Từ khóa nào dùng để kế thừa trong Java?', 'implements', 'extends', 'inherits', 'super', 1);
 📦 Bước 3. Thêm thư viện JDBC
 
 Tải mysql-connector-j-8.x.x.jar từ trang chủ MySQL
+
 Thêm vào classpath của project
 
 ⚙️ Bước 4. Cấu hình kết nối database
+
 Trong QuizServer.java, cập nhật thông tin kết nối:
-javaprivate static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
+
+java
+private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
 private static final String DB_USER = "root";
 private static final String DB_PASS = "your_password"; // Thay bằng mật khẩu MySQL của bạn
 ▶️ Bước 5. Chạy hệ thống
 
 Khởi động Server:
 
-bash   java quiz.QuizServer
-
+bash
+java quiz.QuizServer
 Server sẽ chạy trên port 5000
-Giao diện xem kết quả sẽ hiển thị tự động
 
+Giao diện xem kết quả sẽ hiển thị tự động
 
 Chạy Client:
 
-bash   java quiz.QuizClient
-
+bash
+java quiz.QuizClient
 Client sẽ kết nối tới localhost:5000
-Giao diện làm bài thi sẽ hiển thị
 
+Giao diện làm bài thi sẽ hiển thị
 
 Làm bài thi:
 
 Nhập tên sinh viên
+
 Chọn đáp án cho từng câu hỏi
+
 Nhấn "Nộp bài thi"
+
 Xem kết quả và các đáp án đúng/sai
-
-
 ## 🔧 5. Liên hệ ( cá nhân )
 
 ## 👜Thông tin cá nhân
