@@ -13,7 +13,10 @@ public class QuizServer {
     private static final String DB_PASS = "1234";
 
     public static void main(String[] args) {
+        // Khởi chạy trình xem kết quả
         SwingUtilities.invokeLater(() -> new ResultsViewerSwing());
+        
+        // DÒNG KHỞI CHẠY QuestionManager ĐÃ ĐƯỢC XÓA Ở ĐÂY
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("QuizServer đang chạy tại cổng " + PORT);
@@ -38,6 +41,16 @@ public class QuizServer {
 
                 out.flush();
                 List<Question> questions = fetchQuestionsFromDB();
+
+                // Logic xáo trộn câu hỏi và đáp án
+                Collections.shuffle(questions);
+                for (Question q : questions) {
+                    String correctAnswerText = q.getOptions().get(q.getAnswerIndex());
+                    Collections.shuffle(q.getOptions());
+                    int newAnswerIndex = q.getOptions().indexOf(correctAnswerText);
+                    q.setAnswerIndex(newAnswerIndex);
+                }
+
                 out.writeObject(questions);
                 out.flush();
 
@@ -70,7 +83,7 @@ public class QuizServer {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
                      Statement stmt = conn.createStatement();
-                     ResultSet rs = stmt.executeQuery("SELECT * FROM questions")) {
+                     ResultSet rs = stmt.executeQuery("SELECT * FROM questions ORDER BY RAND() LIMIT 10")) {
 
                     while (rs.next()) {
                         String content = rs.getString("content");

@@ -1,155 +1,147 @@
 package quiz;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ResultsViewerSwing extends JFrame {
+
     private DefaultTableModel tableModel;
     private JTable resultsTable;
     private JLabel totalStudentsLabel;
     private JLabel averageScoreLabel;
     private JLabel refreshStatusLabel;
     private Timer refreshTimer;
-    
-    // Colors
-    private static final Color PRIMARY_COLOR = new Color(74, 144, 226);
-    private static final Color SECONDARY_COLOR = new Color(108, 117, 125);
-    private static final Color BACKGROUND_COLOR = new Color(248, 249, 250);
-    private static final Color CARD_COLOR = Color.WHITE;
-    private static final Color SUCCESS_COLOR = new Color(40, 167, 69);
-    private static final Color WARNING_COLOR = new Color(255, 193, 7);
-    private static final Color ERROR_COLOR = new Color(220, 53, 69);
-    private static final Color HEADER_COLOR = new Color(52, 58, 64);
 
-    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
+    // --- HỆ THỐNG FONT VÀ MÀU SẮC ĐỒNG BỘ ---
+    private static final Font FONT_MAIN = new Font("Segoe UI", Font.PLAIN, 14);
+    private static final Font FONT_BOLD = new Font("Segoe UI", Font.BOLD, 14);
+    private static final Font FONT_HEADER = new Font("Segoe UI", Font.BOLD, 24);
+    private static final Font FONT_STATS = new Font("Segoe UI", Font.BOLD, 16);
+
+    private static final Color COLOR_PRIMARY = new Color(0, 123, 255);
+    private static final Color COLOR_BACKGROUND = new Color(245, 247, 250);
+    private static final Color COLOR_CARD = Color.WHITE;
+    private static final Color COLOR_SUCCESS = new Color(40, 167, 69);
+    private static final Color COLOR_ERROR = new Color(220, 53, 69);
+    private static final Color COLOR_WARNING = new Color(255, 193, 7);
+    private static final Color COLOR_BORDER = new Color(222, 226, 230);
+    private static final Color COLOR_HEADER_BG = new Color(248, 249, 250);
+    private static final Color COLOR_TEXT_DARK = new Color(52, 58, 64);
+    private static final Color COLOR_TEXT_LIGHT = new Color(108, 117, 125);
+
+    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "1234";
 
     public ResultsViewerSwing() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         initializeUI();
         startAutoRefresh();
     }
 
     private void initializeUI() {
         setTitle("Bảng Kết Quả Thi Trắc Nghiệm");
-        setSize(1000, 700);
+        setSize(1100, 750);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // Set modern look and feel
-        try {
-            UIManager.setLookAndFeel(UIManager.getLookAndFeel());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        getContentPane().setBackground(COLOR_BACKGROUND);
 
-        // Header Panel
         add(createHeaderPanel(), BorderLayout.NORTH);
-        
-        // Main Content
         add(createMainPanel(), BorderLayout.CENTER);
-        
-        // Footer Panel
         add(createFooterPanel(), BorderLayout.SOUTH);
 
-        // Initial load
         refreshData();
-
-        // Window properties
         setLocationRelativeTo(null);
-        setBackground(BACKGROUND_COLOR);
-        
-        // Add window icon
-        setIconImage(createIcon());
-        
         setVisible(true);
     }
 
-    private Image createIcon() {
-        // Create a simple icon
-        BufferedImage icon = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = icon.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(PRIMARY_COLOR);
-        g2.fillRoundRect(4, 4, 24, 24, 8, 8);
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Arial", Font.BOLD, 14));
-        g2.drawString("📊", 8, 21);
-        g2.dispose();
-        return icon;
-    }
-
     private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(PRIMARY_COLOR);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));
+        JPanel headerPanel = new JPanel(new BorderLayout(20, 0));
+        headerPanel.setBackground(COLOR_CARD);
+        headerPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDER),
+            BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
 
-        // Title section
-        JPanel titleSection = new JPanel();
-        titleSection.setLayout(new BoxLayout(titleSection, BoxLayout.Y_AXIS));
-        titleSection.setBackground(PRIMARY_COLOR);
+        JLabel titleLabel = new JLabel("Bảng Kết Quả Thi");
+        titleLabel.setFont(FONT_HEADER);
+        titleLabel.setForeground(COLOR_TEXT_DARK);
 
-        JLabel titleLabel = new JLabel("BẢNG KẾT QUẢ THI", SwingConstants.LEFT);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        titleLabel.setForeground(Color.WHITE);
+        JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 25, 0));
+        statsPanel.setBackground(COLOR_CARD);
 
-        JLabel subtitleLabel = new JLabel("Theo dõi kết quả thi trắc nghiệm của sinh viên", SwingConstants.LEFT);
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        subtitleLabel.setForeground(new Color(255, 255, 255, 200));
-
-        titleSection.add(titleLabel);
-        titleSection.add(Box.createVerticalStrut(5));
-        titleSection.add(subtitleLabel);
-
-        // Statistics section
-        JPanel statsPanel = createStatsPanel();
+        // === THAY ĐỔI: BỎ ICON, THAY BẰNG CHỮ ===
+        totalStudentsLabel = new JLabel("Tổng SV: 0");
+        totalStudentsLabel.setFont(FONT_STATS);
         
-        headerPanel.add(titleSection, BorderLayout.WEST);
+        averageScoreLabel = new JLabel("Điểm TB: 0.0");
+        averageScoreLabel.setFont(FONT_STATS);
+        // === KẾT THÚC THAY ĐỔI ===
+
+        statsPanel.add(totalStudentsLabel);
+        statsPanel.add(averageScoreLabel);
+
+        headerPanel.add(titleLabel, BorderLayout.WEST);
         headerPanel.add(statsPanel, BorderLayout.EAST);
 
         return headerPanel;
     }
+    
+    // === THAY ĐỔI: CẬP NHẬT LẠI CÁCH HIỂN THỊ DỮ LIỆU ===
+    private void updateStatistics(List<ResultData> results) {
+        totalStudentsLabel.setText("Tổng SV: " + results.size());
+        if (!results.isEmpty()) {
+            double average = results.stream().mapToInt(r -> r.score).average().orElse(0.0);
+            averageScoreLabel.setText(String.format("Điểm TB: %.1f", average));
+        } else {
+            averageScoreLabel.setText("Điểm TB: 0.0");
+        }
+    }
 
-    private JPanel createStatsPanel() {
-        JPanel statsPanel = new JPanel();
-        statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
-        statsPanel.setBackground(PRIMARY_COLOR);
-
-        totalStudentsLabel = new JLabel("👥 Tổng SV: 0");
-        totalStudentsLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        totalStudentsLabel.setForeground(Color.WHITE);
-        totalStudentsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-
-        averageScoreLabel = new JLabel("📈 Điểm TB: 0.0");
-        averageScoreLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        averageScoreLabel.setForeground(Color.WHITE);
-        averageScoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-
-        statsPanel.add(totalStudentsLabel);
-        statsPanel.add(Box.createVerticalStrut(5));
-        statsPanel.add(averageScoreLabel);
-
-        return statsPanel;
+    // --- CÁC HÀM KHÁC GIỮ NGUYÊN ---
+    private JButton createStyledButton(String text, Color bgColor) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button.setBackground(bgColor);
+        button.setForeground(Color.WHITE);
+        button.setOpaque(true); 
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor);
+            }
+        });
+        return button;
     }
 
     private JPanel createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel mainPanel = new JPanel(new BorderLayout(0, 15));
+        mainPanel.setBackground(COLOR_BACKGROUND);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        // Create table
-        String[] columns = {"STT", "Tên Sinh Viên", " Điểm", "Địa Chỉ IP", "Thời Gian", "Đánh Giá"};
+        mainPanel.add(createControlPanel(), BorderLayout.NORTH);
+
+        String[] columns = {"STT", "Tên Sinh Viên", "Điểm", "Địa Chỉ IP", "Thời Gian Nộp Bài", "Đánh Giá"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -160,50 +152,32 @@ public class ResultsViewerSwing extends JFrame {
         resultsTable = new JTable(tableModel);
         setupTable();
 
-        // Table in scroll pane
         JScrollPane scrollPane = new JScrollPane(resultsTable);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 30), 1));
-        scrollPane.setBackground(CARD_COLOR);
-        scrollPane.getViewport().setBackground(CARD_COLOR);
-
-        // Control panel
-        JPanel controlPanel = createControlPanel();
-
-        // Add to main panel
-        mainPanel.add(controlPanel, BorderLayout.NORTH);
+        scrollPane.setBorder(BorderFactory.createLineBorder(COLOR_BORDER));
+        
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         return mainPanel;
     }
-
+    
     private JPanel createControlPanel() {
         JPanel controlPanel = new JPanel(new BorderLayout());
-        controlPanel.setBackground(CARD_COLOR);
-        controlPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 0, 0, 30), 1),
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
+        controlPanel.setBackground(COLOR_BACKGROUND);
 
-        // Left side - info
-        JLabel infoLabel = new JLabel("🔄 Dữ liệu tự động cập nhật mỗi 2 giây");
-        infoLabel.setFont(new Font("Arial", Font.ITALIC, 12));
-        infoLabel.setForeground(SECONDARY_COLOR);
+        JLabel infoLabel = new JLabel("Dữ liệu tự động làm mới sau mỗi 5 giây.");
+        infoLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        infoLabel.setForeground(COLOR_TEXT_LIGHT);
 
-        // Right side - buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        buttonPanel.setBackground(CARD_COLOR);
-
-        JButton refreshButton = createStyledButton("Làm mới", PRIMARY_COLOR);
+        buttonPanel.setBackground(COLOR_BACKGROUND);
+        
+        JButton refreshButton = createStyledButton("Làm mới", COLOR_PRIMARY);
         refreshButton.addActionListener(e -> refreshData());
 
-        JButton exportButton = createStyledButton("Xuất Excel", SUCCESS_COLOR);
-        exportButton.addActionListener(e -> exportToExcel());
-
-        JButton clearButton = createStyledButton("Xóa dữ liệu", ERROR_COLOR);
+        JButton clearButton = createStyledButton("Xóa Tất Cả", COLOR_ERROR);
         clearButton.addActionListener(e -> clearAllData());
 
         buttonPanel.add(refreshButton);
-        buttonPanel.add(exportButton);
         buttonPanel.add(clearButton);
 
         controlPanel.add(infoLabel, BorderLayout.WEST);
@@ -212,197 +186,113 @@ public class ResultsViewerSwing extends JFrame {
         return controlPanel;
     }
 
-    private JButton createStyledButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Hover effect
-        Color originalColor = bgColor;
-        Color hoverColor = bgColor.darker();
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                button.setBackground(hoverColor);
-            }
-            
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                button.setBackground(originalColor);
-            }
-        });
-
-        return button;
-    }
-
     private void setupTable() {
-        // Table properties
-        resultsTable.setFont(new Font("Arial", Font.PLAIN, 14));
-        resultsTable.setRowHeight(50);
-        resultsTable.setBackground(CARD_COLOR);
-        resultsTable.setGridColor(new Color(0, 0, 0, 30));
-        resultsTable.setShowVerticalLines(true);
-        resultsTable.setShowHorizontalLines(true);
-        resultsTable.setSelectionBackground(new Color(PRIMARY_COLOR.getRed(), PRIMARY_COLOR.getGreen(), PRIMARY_COLOR.getBlue(), 50));
+        resultsTable.setFont(FONT_MAIN);
+        resultsTable.setRowHeight(40);
+        resultsTable.setGridColor(COLOR_BORDER);
+        resultsTable.setSelectionBackground(COLOR_PRIMARY.brighter());
+        resultsTable.setSelectionForeground(Color.WHITE);
+        resultsTable.setShowGrid(true);
 
-        // Header styling
         JTableHeader header = resultsTable.getTableHeader();
-        header.setFont(new Font("Arial", Font.BOLD, 14));
-        header.setBackground(HEADER_COLOR);
-        header.setForeground(Color.WHITE);
-        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
+        header.setFont(FONT_BOLD);
+        header.setBackground(COLOR_HEADER_BG);
+        header.setForeground(COLOR_TEXT_DARK);
+        header.setPreferredSize(new Dimension(100, 40));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDER));
+        
+        resultsTable.getColumnModel().getColumn(0).setMaxWidth(60);
+        resultsTable.getColumnModel().getColumn(1).setPreferredWidth(250);
+        resultsTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+        resultsTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+        resultsTable.getColumnModel().getColumn(4).setPreferredWidth(180);
+        resultsTable.getColumnModel().getColumn(5).setPreferredWidth(120);
 
-        // Column widths
-        resultsTable.getColumnModel().getColumn(0).setPreferredWidth(60);   // STT
-        resultsTable.getColumnModel().getColumn(1).setPreferredWidth(200);  // Name
-        resultsTable.getColumnModel().getColumn(2).setPreferredWidth(80);   // Score
-        resultsTable.getColumnModel().getColumn(3).setPreferredWidth(120);  // IP
-        resultsTable.getColumnModel().getColumn(4).setPreferredWidth(150);  // Time
-        resultsTable.getColumnModel().getColumn(5).setPreferredWidth(100);  // Rating
-
-        // Custom cell renderers
-        resultsTable.getColumnModel().getColumn(0).setCellRenderer(new CenterAlignRenderer());
-        resultsTable.getColumnModel().getColumn(2).setCellRenderer(new ScoreCellRenderer());
-        resultsTable.getColumnModel().getColumn(5).setCellRenderer(new RatingCellRenderer());
-
-        // Alternating row colors
-        resultsTable.setDefaultRenderer(Object.class, new AlternatingRowRenderer());
+        resultsTable.setDefaultRenderer(Object.class, new CustomTableCellRenderer());
     }
 
     private JPanel createFooterPanel() {
         JPanel footerPanel = new JPanel(new BorderLayout());
-        footerPanel.setBackground(BACKGROUND_COLOR);
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 20, 20));
+        footerPanel.setBackground(COLOR_CARD);
+        footerPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(1, 0, 0, 0, COLOR_BORDER),
+            BorderFactory.createEmptyBorder(10, 30, 10, 30)
+        ));
 
-        refreshStatusLabel = new JLabel("Kết nối database thành công");
-        refreshStatusLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        refreshStatusLabel.setForeground(SUCCESS_COLOR);
-
-        JLabel versionLabel = new JLabel("Quiz Management System v1.0 | Developed with ❤️");
-        versionLabel.setFont(new Font("Arial", Font.ITALIC, 11));
-        versionLabel.setForeground(SECONDARY_COLOR);
-        versionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        refreshStatusLabel = new JLabel("Đang tải dữ liệu...");
+        refreshStatusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        refreshStatusLabel.setForeground(COLOR_TEXT_LIGHT);
 
         footerPanel.add(refreshStatusLabel, BorderLayout.WEST);
-        footerPanel.add(versionLabel, BorderLayout.EAST);
-
         return footerPanel;
     }
 
     private void startAutoRefresh() {
-        refreshTimer = new Timer(2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshData();
-            }
-        });
+        refreshTimer = new Timer(5000, e -> refreshData()); // 5 giây
         refreshTimer.start();
     }
 
     private void refreshData() {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                List<ResultData> results = fetchResultsFromDB();
-                updateTable(results);
-                updateStatistics(results);
-                refreshStatusLabel.setText("Cập nhật lúc: " + new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()));
-                refreshStatusLabel.setForeground(SUCCESS_COLOR);
-            } catch (Exception e) {
-                refreshStatusLabel.setText("Lỗi kết nối database");
-                refreshStatusLabel.setForeground(ERROR_COLOR);
-                e.printStackTrace();
+        new SwingWorker<List<ResultData>, Void>() {
+            @Override
+            protected List<ResultData> doInBackground() throws Exception {
+                return fetchResultsFromDB();
             }
-        });
+
+            @Override
+            protected void done() {
+                try {
+                    List<ResultData> results = get();
+                    updateTable(results);
+                    updateStatistics(results);
+                    refreshStatusLabel.setText("Cập nhật lần cuối lúc: " + new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                    refreshStatusLabel.setForeground(COLOR_SUCCESS);
+                } catch (Exception e) {
+                    refreshStatusLabel.setText("Lỗi kết nối database: " + e.getMessage());
+                    refreshStatusLabel.setForeground(COLOR_ERROR);
+                }
+            }
+        }.execute();
     }
 
     private void updateTable(List<ResultData> results) {
         tableModel.setRowCount(0);
-        for (int i = 0; i < results.size(); i++) {
-            ResultData result = results.get(i);
+        int stt = 1;
+        for (ResultData result : results) {
             String rating = getRating(result.score);
-            Object[] row = {
-                i + 1,
-                result.name,
-                result.score,
-                result.ip,
-                result.time,
-                rating
-            };
-            tableModel.addRow(row);
-        }
-    }
-
-    private void updateStatistics(List<ResultData> results) {
-        totalStudentsLabel.setText("Tổng SV: " + results.size());
-        
-        if (!results.isEmpty()) {
-            double average = results.stream().mapToInt(r -> r.score).average().orElse(0.0);
-            averageScoreLabel.setText(String.format("Điểm TB: %.1f", average));
-        } else {
-            averageScoreLabel.setText(" Điểm TB: 0.0");
+            tableModel.addRow(new Object[]{stt++, result.name, result.score, result.ip, result.time, rating});
         }
     }
 
     private String getRating(int score) {
-        if (score >= 8) return "Xuất sắc";
-        else if (score >= 7) return "Giỏi";
-        else if (score >= 6) return "Khá";
-        else if (score >= 5) return "Trung bình";
-        else return "Yếu";
+        if (score >= 9) return "Xuất sắc";
+        if (score >= 7) return "Giỏi";
+        if (score >= 5) return "Khá";
+        return "Yếu";
     }
 
-    private List<ResultData> fetchResultsFromDB() {
+    private List<ResultData> fetchResultsFromDB() throws SQLException {
         List<ResultData> list = new ArrayList<>();
         String sql = "SELECT name, score, ip, time FROM results ORDER BY time DESC";
         
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-
             while (rs.next()) {
-                ResultData result = new ResultData();
-                result.name = rs.getString("name");
-                result.score = rs.getInt("score");
-                result.ip = rs.getString("ip");
-                result.time = rs.getTimestamp("time").toString();
-                list.add(result);
+                list.add(new ResultData(
+                    rs.getString("name"),
+                    rs.getInt("score"),
+                    rs.getString("ip"),
+                    new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(rs.getTimestamp("time"))
+                ));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Database connection failed", e);
         }
-        
         return list;
     }
-
-    private void exportToExcel() {
-        // Simple CSV export (you can enhance this with Apache POI for real Excel)
-        try {
-            java.io.FileWriter writer = new java.io.FileWriter("quiz_results.csv");
-            writer.write("STT,Tên Sinh Viên,Điểm,Địa Chỉ IP,Thời Gian,Đánh Giá\n");
-            
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                for (int j = 0; j < tableModel.getColumnCount(); j++) {
-                    writer.write(tableModel.getValueAt(i, j).toString());
-                    if (j < tableModel.getColumnCount() - 1) writer.write(",");
-                }
-                writer.write("\n");
-            }
-            
-            writer.close();
-            JOptionPane.showMessageDialog(this, "Đã xuất dữ liệu ra file quiz_results.csv", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xuất file: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
+    
     private void clearAllData() {
         int choice = JOptionPane.showConfirmDialog(this,
-            "Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu kết quả?\nHành động này không thể hoàn tác!",
+            "Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu kết quả không?\nHành động này không thể hoàn tác!",
             "Xác nhận xóa dữ liệu",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.WARNING_MESSAGE);
@@ -410,82 +300,60 @@ public class ResultsViewerSwing extends JFrame {
         if (choice == JOptionPane.YES_OPTION) {
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
                  Statement stmt = conn.createStatement()) {
-                
-                stmt.executeUpdate("DELETE FROM results");
+                stmt.executeUpdate("TRUNCATE TABLE results");
                 refreshData();
-                JOptionPane.showMessageDialog(this, " Đã xóa tất cả dữ liệu kết quả", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-                
+                JOptionPane.showMessageDialog(this, "Đã xóa tất cả dữ liệu thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, " Lỗi khi xóa dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Lỗi khi xóa dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-
-    // Inner classes for table renderers
-    private class CenterAlignRenderer extends DefaultTableCellRenderer {
-        public CenterAlignRenderer() {
-            setHorizontalAlignment(SwingConstants.CENTER);
-        }
-    }
-
-    private class ScoreCellRenderer extends DefaultTableCellRenderer {
-        public ScoreCellRenderer() {
-            setHorizontalAlignment(SwingConstants.CENTER);
-            setFont(new Font("Arial", Font.BOLD, 14));
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            
-            if (value instanceof Integer) {
-                int score = (Integer) value;
-                if (score >= 8) setForeground(SUCCESS_COLOR);
-                else if (score >= 6) setForeground(WARNING_COLOR);
-                else setForeground(ERROR_COLOR);
-            }
-            
-            return this;
-        }
-    }
-
-    private class RatingCellRenderer extends DefaultTableCellRenderer {
-        public RatingCellRenderer() {
-            setHorizontalAlignment(SwingConstants.CENTER);
-            setFont(new Font("Arial", Font.BOLD, 12));
-        }
-    }
-
-    private class AlternatingRowRenderer extends DefaultTableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            
-            if (!isSelected) {
-                if (row % 2 == 0) {
-                    setBackground(CARD_COLOR);
-                } else {
-                    setBackground(new Color(248, 249, 250));
-                }
-            }
-            
-            return this;
-        }
-    }
-
-    // Data class
+    
     private static class ResultData {
-        String name;
-        int score;
-        String ip;
-        String time;
-    }
-
-    @Override
-    public void dispose() {
-        if (refreshTimer != null) {
-            refreshTimer.stop();
+        final String name;
+        final int score;
+        final String ip;
+        final String time;
+        ResultData(String name, int score, String ip, String time) {
+            this.name = name; this.score = score; this.ip = ip; this.time = time;
         }
-        super.dispose();
+    }
+    
+    private static class CustomTableCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (!isSelected) {
+                c.setBackground(row % 2 == 0 ? COLOR_CARD : COLOR_BACKGROUND);
+            }
+            
+            setHorizontalAlignment(column == 1 ? SwingConstants.LEFT : SwingConstants.CENTER);
+            setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+
+            c.setForeground(COLOR_TEXT_DARK);
+            c.setFont(FONT_MAIN);
+
+            if (column == 2 && value instanceof Integer) {
+                int score = (Integer) value;
+                if (score >= 7) c.setForeground(COLOR_SUCCESS);
+                else if (score >= 5) c.setForeground(COLOR_WARNING);
+                else c.setForeground(COLOR_ERROR);
+                setFont(FONT_BOLD);
+            }
+
+            if (column == 5 && value != null) {
+                String rating = value.toString();
+                switch (rating) {
+                    case "Xuất sắc": c.setForeground(COLOR_SUCCESS); break;
+                    case "Giỏi": c.setForeground(COLOR_PRIMARY); break;
+                    case "Khá": c.setForeground(COLOR_WARNING); break;
+                    case "Yếu": c.setForeground(COLOR_ERROR); break;
+                }
+                 setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 13));
+            }
+            
+            return c;
+        }
     }
 }

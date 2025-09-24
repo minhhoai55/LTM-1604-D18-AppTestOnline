@@ -1,12 +1,13 @@
 package quiz;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +20,31 @@ public class QuizClientSwing extends JFrame {
     private ObjectInputStream in;
     private Socket socket;
     private JTextField nameField;
+
+    private Timer timer;
+    private int timeLeftInSeconds = 600; // 10 phút
+    private JLabel timerLabel;
     
-    // Colors
-    private static final Color PRIMARY_COLOR = new Color(74, 144, 226);
-    private static final Color SECONDARY_COLOR = new Color(108, 117, 125);
-    private static final Color BACKGROUND_COLOR = new Color(248, 249, 250);
-    private static final Color CARD_COLOR = Color.WHITE;
-    private static final Color SUCCESS_COLOR = new Color(40, 167, 69);
-    private static final Color ERROR_COLOR = new Color(220, 53, 69);
-    private static final Color WARNING_COLOR = new Color(255, 193, 7);
+    private boolean isSubmitted = false; // Biến cờ để kiểm tra đã nộp bài chưa
+
+    // --- CÁC HẰNG SỐ CHO GIAO DIỆN ---
+    private static final Font FONT_MAIN = new Font("Segoe UI", Font.PLAIN, 15);
+    private static final Font FONT_BOLD = new Font("Segoe UI", Font.BOLD, 16);
+    private static final Font FONT_HEADER = new Font("Segoe UI", Font.BOLD, 26);
+    private static final Font FONT_TIMER = new Font("Segoe UI", Font.BOLD, 22);
+
+    private static final Color COLOR_PRIMARY = new Color(0, 123, 255);
+    private static final Color COLOR_BACKGROUND = new Color(245, 247, 250);
+    private static final Color COLOR_CARD = Color.WHITE;
+    private static final Color COLOR_SUCCESS = new Color(40, 167, 69);
+    private static final Color COLOR_ERROR = new Color(220, 53, 69);
+    private static final Color COLOR_WARNING = new Color(255, 193, 7);
+    private static final Color COLOR_BORDER = new Color(222, 226, 230);
+    private static final Color COLOR_SELECTED_BG = new Color(236, 240, 241); // Màu khi chọn đáp án
+
+    private static final Color COLOR_CORRECT_BG = new Color(212, 237, 218);
+    private static final Color COLOR_INCORRECT_BG = new Color(248, 215, 218);
+
 
     public QuizClientSwing(List<Question> questions, ObjectOutputStream out,
                            ObjectInputStream in, Socket socket) {
@@ -37,342 +54,194 @@ public class QuizClientSwing extends JFrame {
         this.socket = socket;
         this.optionButtons = new ArrayList<>();
 
-        initializeUI();
-    }
-
-    private void initializeUI() {
-        setTitle("Ung dung Trac nghiem Online");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
-        
-        // Set modern look and feel
         try {
-            UIManager.setLookAndFeel(UIManager.getLookAndFeel());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Header Panel
-        JPanel headerPanel = createHeaderPanel();
-        add(headerPanel, BorderLayout.NORTH);
-
-        // Main Content
-        JPanel mainPanel = createMainPanel();
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        scrollPane.setBorder(null);
-        scrollPane.setBackground(BACKGROUND_COLOR);
-        add(scrollPane, BorderLayout.CENTER);
-
-        // Footer with Submit Button
-        JPanel footerPanel = createFooterPanel();
-        add(footerPanel, BorderLayout.SOUTH);
-
-        // Window properties
-        setSize(800, 700);
-        setLocationRelativeTo(null);
-        setBackground(BACKGROUND_COLOR);
-        
-        // Add window icon
-        setIconImage(createIcon());
-        
-        setVisible(true);
+        initializeUI();
+        startTimer();
     }
 
-    private Image createIcon() {
-        // Create a simple icon
-        BufferedImage icon = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = (Graphics2D) icon.getGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(PRIMARY_COLOR);
-        g2.fillRoundRect(4, 4, 24, 24, 8, 8);
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Arial", Font.BOLD, 16));
-        g2.drawString("Q", 11, 21);
-        g2.dispose();
-        return icon;
+    private void initializeUI() {
+        setTitle("Ứng dụng Trắc nghiệm Online");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+        setBackground(COLOR_BACKGROUND);
+
+        add(createHeaderPanel(), BorderLayout.NORTH);
+        
+        JScrollPane scrollPane = new JScrollPane(createMainPanel());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setBorder(null);
+        add(scrollPane, BorderLayout.CENTER);
+
+        add(createFooterPanel(), BorderLayout.SOUTH);
+
+        setSize(850, 750);
+        setLocationRelativeTo(null);
+        setIconImage(createIcon());
+        setVisible(true);
+    }
+    
+    private void startTimer() {
+        timer = new Timer(1000, e -> {
+            timeLeftInSeconds--;
+            int minutes = timeLeftInSeconds / 60;
+            int seconds = timeLeftInSeconds % 60;
+            timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+
+            if (timeLeftInSeconds <= 60 && timeLeftInSeconds > 10) {
+                timerLabel.setForeground(COLOR_WARNING);
+            } else if (timeLeftInSeconds <= 10) {
+                timerLabel.setForeground(COLOR_ERROR);
+            }
+
+            if (timeLeftInSeconds <= 0) {
+                timer.stop();
+                JOptionPane.showMessageDialog(this, "Đã hết giờ làm bài!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                submitAnswers();
+            }
+        });
+        timer.start();
     }
 
     private JPanel createHeaderPanel() {
-        JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(PRIMARY_COLOR);
-        header.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        JPanel header = new JPanel(new BorderLayout(20, 0));
+        header.setBackground(COLOR_CARD);
+        header.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDER),
+            BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
 
-        // Title
-        JLabel titleLabel = new JLabel("BAI THI TRAC NGHIEM", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
+        JLabel titleLabel = new JLabel("BÀI THI TRẮC NGHIỆM");
+        titleLabel.setFont(FONT_HEADER);
+        titleLabel.setForeground(COLOR_PRIMARY);
 
-        // Subtitle
-        JLabel subtitleLabel = new JLabel("Vui long doc ky cau hoi va chon dap an dung nhat", SwingConstants.CENTER);
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        subtitleLabel.setForeground(new Color(255, 255, 255, 200));
+        JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        timerPanel.setBackground(COLOR_CARD);
+        
+        ImageIcon clockIconResource = new ImageIcon("clock.png"); 
+        JLabel clockIcon = new JLabel(clockIconResource);
+        
+        timerLabel = new JLabel(String.format("%02d:00", timeLeftInSeconds / 60));
+        timerLabel.setFont(FONT_TIMER);
+        timerLabel.setForeground(new Color(52, 58, 64));
+        
+        timerPanel.add(clockIcon);
+        timerPanel.add(timerLabel);
 
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setBackground(PRIMARY_COLOR);
-        titlePanel.add(titleLabel);
-        titlePanel.add(Box.createVerticalStrut(5));
-        titlePanel.add(subtitleLabel);
-
-        header.add(titlePanel, BorderLayout.CENTER);
-
-        // Question count info
-        JLabel countLabel = new JLabel(questions.size() + " cau hoi");
-        countLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        countLabel.setForeground(Color.WHITE);
-        countLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        header.add(countLabel, BorderLayout.EAST);
-
+        header.add(titleLabel, BorderLayout.WEST);
+        header.add(timerPanel, BorderLayout.EAST);
+        
         return header;
     }
 
     private JPanel createMainPanel() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        mainPanel.setBackground(COLOR_BACKGROUND);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
-        // Student name section
-        JPanel nameSection = createNameSection();
-        mainPanel.add(nameSection);
+        mainPanel.add(createNameSection());
         mainPanel.add(Box.createVerticalStrut(30));
 
-        // Questions
-        for (int qi = 0; qi < questions.size(); qi++) {
-            Question q = questions.get(qi);
-            JPanel questionPanel = createQuestionPanel(q, qi);
-            mainPanel.add(questionPanel);
+        for (int i = 0; i < questions.size(); i++) {
+            mainPanel.add(createQuestionPanel(questions.get(i), i));
             mainPanel.add(Box.createVerticalStrut(20));
         }
-
         return mainPanel;
     }
 
-    private JPanel createNameSection() {
-        JPanel nameSection = new JPanel();
-        nameSection.setLayout(new BoxLayout(nameSection, BoxLayout.Y_AXIS));
-        nameSection.setBackground(CARD_COLOR);
-        nameSection.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 0, 0, 30), 1),
-            BorderFactory.createEmptyBorder(25, 25, 25, 25)
-        ));
-
-        // Title
-        JLabel nameLabel = new JLabel("Thong tin sinh vien");
-        nameLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        nameLabel.setForeground(PRIMARY_COLOR);
-
-        // Name field
-        nameField = new JTextField();
-        nameField.setFont(new Font("Arial", Font.PLAIN, 14));
-        nameField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 0, 0, 30), 1),
-            BorderFactory.createEmptyBorder(12, 15, 12, 15)
-        ));
-        nameField.setBackground(Color.WHITE);
-        
-        // Placeholder effect
-        nameField.setText("Nhap ho va ten cua ban...");
-        nameField.setForeground(Color.GRAY);
-        nameField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (nameField.getText().equals("Nhap ho va ten cua ban...")) {
-                    nameField.setText("");
-                    nameField.setForeground(Color.BLACK);
-                }
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (nameField.getText().isEmpty()) {
-                    nameField.setText("Nhap ho va ten cua ban...");
-                    nameField.setForeground(Color.GRAY);
-                }
-            }
-        });
-
-        nameSection.add(nameLabel);
-        nameSection.add(Box.createVerticalStrut(10));
-        nameSection.add(nameField);
-
-        return nameSection;
-    }
-
     private JPanel createQuestionPanel(Question q, int index) {
-        JPanel questionPanel = new JPanel();
+        JPanel questionPanel = createCardPanel();
         questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
-        questionPanel.setBackground(CARD_COLOR);
-        questionPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 0, 0, 30), 1),
-            BorderFactory.createEmptyBorder(25, 25, 25, 25)
-        ));
 
-        // Question number and content
         JLabel questionNumber = new JLabel("Câu " + (index + 1));
-        questionNumber.setFont(new Font("Arial", Font.BOLD, 16));
-        questionNumber.setForeground(PRIMARY_COLOR);
+        questionNumber.setFont(FONT_BOLD);
+        questionNumber.setForeground(COLOR_PRIMARY);
 
-        JLabel questionContent = new JLabel("<html><div style='width: 600px; padding: 10px 0;'>" 
-            + q.getContent() + "</div></html>");
-        questionContent.setFont(new Font("Arial", Font.PLAIN, 15));
-        questionContent.setForeground(new Color(33, 37, 41));
-
+        JLabel questionContent = new JLabel("<html><div style='width: 650px; line-height: 1.4;'>" + q.getContent() + "</div></html>");
+        questionContent.setFont(FONT_MAIN);
+        
         questionPanel.add(questionNumber);
         questionPanel.add(Box.createVerticalStrut(10));
         questionPanel.add(questionContent);
         questionPanel.add(Box.createVerticalStrut(15));
 
-        // Options
         ButtonGroup group = new ButtonGroup();
-        List<JRadioButton> buttons = new ArrayList<>();
-
-        for (int i = 0; i < q.getOptions().size(); i++) {
-            JRadioButton rb = createStyledRadioButton(q.getOptions().get(i), (char)('A' + i));
+        List<JRadioButton> buttonsForThisQuestion = new ArrayList<>();
+        char optionChar = 'A';
+        for (String optionText : q.getOptions()) {
+            JRadioButton rb = createStyledRadioButton(optionText, optionChar++);
             group.add(rb);
             questionPanel.add(rb);
             questionPanel.add(Box.createVerticalStrut(10));
-            buttons.add(rb);
-            
-            // Add selection effect using border
-            final CompoundBorder defaultBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(0, 0, 0, 30), 1),
-                BorderFactory.createEmptyBorder(12, 15, 12, 15)
-            );
-            
-            final CompoundBorder selectedBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(SUCCESS_COLOR, 2),
-                BorderFactory.createEmptyBorder(11, 14, 11, 14)
-            );
-            
-            rb.addActionListener(e -> {
-                // Reset all buttons to default border
-                for (JRadioButton button : buttons) {
-                    if (!button.isSelected()) {
-                        button.setBorder(defaultBorder);
-                    }
-                }
-                // Set selected button border
-                if (rb.isSelected()) {
-                    rb.setBorder(selectedBorder);
-                }
-            });
+            buttonsForThisQuestion.add(rb);
         }
+        
+        // === LOGIC MỚI ĐỂ SỬA LỖI TÔ MÀU KHI CHỌN ===
+        // Thêm listener cho từng nút để cập nhật màu nền của cả nhóm
+        ActionListener selectionListener = e -> {
+            for (JRadioButton btn : buttonsForThisQuestion) {
+                if (btn.isSelected()) {
+                    btn.setBackground(COLOR_SELECTED_BG);
+                } else {
+                    btn.setBackground(COLOR_CARD);
+                }
+            }
+        };
 
-        optionButtons.add(buttons);
+        for (JRadioButton rb : buttonsForThisQuestion) {
+            rb.addActionListener(selectionListener);
+        }
+        // === KẾT THÚC LOGIC MỚI ===
+
+        optionButtons.add(buttonsForThisQuestion);
         return questionPanel;
     }
 
     private JRadioButton createStyledRadioButton(String text, char letter) {
-        JRadioButton rb = new JRadioButton("<html><b>" + letter + ".</b> " + text + "</html>");
-        rb.setFont(new Font("Arial", Font.PLAIN, 14));
-        rb.setBackground(CARD_COLOR);
-        rb.setOpaque(true);
+        JRadioButton rb = new JRadioButton("<html><b style='color: #007BFF;'>" + letter + ".</b> " + text + "</html>");
+        rb.setFont(FONT_MAIN);
+        rb.setBackground(COLOR_CARD);
         rb.setFocusPainted(false);
+        rb.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
+        rb.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // Use border for visual effects instead of background
-        final CompoundBorder defaultBorder = BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 0, 0, 30), 1),
-            BorderFactory.createEmptyBorder(12, 15, 12, 15)
-        );
-        
-        final CompoundBorder hoverBorder = BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(PRIMARY_COLOR, 2),
-            BorderFactory.createEmptyBorder(11, 14, 11, 14)  // Adjust padding for thicker border
-        );
-        
-        final CompoundBorder selectedBorder = BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(SUCCESS_COLOR, 2),
-            BorderFactory.createEmptyBorder(11, 14, 11, 14)
-        );
-        
-        rb.setBorder(defaultBorder);
-        
-        // Hover effect using border
-        rb.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (!rb.isSelected()) {
-                    rb.setBorder(hoverBorder);
-                }
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (!rb.isSelected()) {
-                    rb.setBorder(defaultBorder);
-                }
-            }
-        });
+        // Đã xóa MouseListener gây lỗi ở đây
         
         return rb;
     }
-
-    private JPanel createFooterPanel() {
-        JPanel footer = new JPanel(new BorderLayout());
-        footer.setBackground(BACKGROUND_COLOR);
-        footer.setBorder(BorderFactory.createEmptyBorder(20, 30, 30, 30));
-
-        // Progress info
-        JLabel progressLabel = new JLabel("Hay kiem tra lai cac cau tra loi truoc khi nop bai");
-        progressLabel.setFont(new Font("Arial", Font.ITALIC, 12));
-        progressLabel.setForeground(SECONDARY_COLOR);
-
-        // Submit button
-        JButton submitBtn = new JButton("NOP BAI THI");
-        submitBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        submitBtn.setBackground(SUCCESS_COLOR);
-        submitBtn.setForeground(Color.WHITE);
-        submitBtn.setFocusPainted(false);
-        submitBtn.setBorder(BorderFactory.createEmptyBorder(15, 40, 15, 40));
-        submitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Button hover effect
-        submitBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                submitBtn.setBackground(new Color(34, 139, 58));
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                submitBtn.setBackground(SUCCESS_COLOR);
-            }
-        });
-
-        submitBtn.addActionListener(e -> submitAnswers());
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setBackground(BACKGROUND_COLOR);
-        buttonPanel.add(submitBtn);
-
-        footer.add(progressLabel, BorderLayout.WEST);
-        footer.add(buttonPanel, BorderLayout.EAST);
-
-        return footer;
-    }
-
+    
     private void submitAnswers() {
+        if(isSubmitted) return; // Chặn nộp bài nhiều lần
+        isSubmitted = true;
+        
+        if (timer != null) timer.stop();
+        
         try {
             String name = nameField.getText().trim();
-            if (name.isEmpty() || name.equals("Nhap ho va ten cua ban...")) {
-                showStyledMessage("Vui long nhap ten sinh vien!", "Thong bao", JOptionPane.WARNING_MESSAGE);
-                nameField.requestFocus();
+            if (name.isEmpty() || name.equals("Nhập họ và tên của bạn...")) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập tên sinh viên!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                isSubmitted = false; // cho phép nộp lại nếu chỉ là lỗi nhập tên
                 return;
             }
-
-            // Check if all questions are answered
+            
             int unanswered = 0;
             for (List<JRadioButton> buttons : optionButtons) {
-                boolean hasSelection = buttons.stream().anyMatch(JRadioButton::isSelected);
-                if (!hasSelection) unanswered++;
+                if (buttons.stream().noneMatch(AbstractButton::isSelected)) unanswered++;
             }
 
             if (unanswered > 0) {
                 int choice = JOptionPane.showConfirmDialog(this,
-                    "Ban con " + unanswered + " cau chua tra loi.\nBan co muon nop bai khong?",
-                    "Xac nhan nop bai",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-                if (choice != JOptionPane.YES_OPTION) return;
+                        "Bạn còn " + unanswered + " câu chưa trả lời.\nBạn có chắc chắn muốn nộp bài không?",
+                        "Xác nhận nộp bài", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (choice != JOptionPane.YES_OPTION) {
+                    isSubmitted = false; // Cho phép nộp lại nếu hủy
+                    return;
+                }
             }
 
             List<Integer> answers = new ArrayList<>();
@@ -387,172 +256,153 @@ public class QuizClientSwing extends JFrame {
                 answers.add(selected);
             }
 
-            // Disable submit button to prevent multiple submissions
-            Component[] components = ((JPanel)getContentPane().getComponent(2)).getComponents();
-            for (Component comp : components) {
-                if (comp instanceof JButton) {
-                    comp.setEnabled(false);
-                    ((JButton)comp).setText("Dang xu ly...");
-                }
-            }
-
             new Thread(() -> {
                 try {
-                    System.out.println("Sending name: " + name);
                     out.writeObject(name);
-                    out.flush();
-                    
-                    System.out.println("Sending answers: " + answers);
                     out.writeObject(answers);
                     out.flush();
 
-                    System.out.println("Waiting for response...");
-                    Object resp = in.readObject();
-                    System.out.println("Received response: " + resp);
-                    
-                    AtomicInteger score = new AtomicInteger(0);
-                    List<Boolean> correctList = new ArrayList<>();
-
-                    if (resp instanceof Object[]) {
-                        Object[] arr = (Object[]) resp;
-                        if (arr.length > 0 && arr[0] instanceof Number)
-                            score.set(((Number) arr[0]).intValue());
-                        if (arr.length > 1 && arr[1] instanceof List<?>) {
-                            for (Object o : (List<?>) arr[1])
-                                correctList.add(Boolean.TRUE.equals(o));
-                        }
-                    } else if (resp instanceof Number) {
-                        score.set(((Number) resp).intValue());
-                    }
-
-                    String ip = socket.getLocalAddress().getHostAddress();
+                    Object[] resp = (Object[]) in.readObject();
+                    int score = (int) resp[0];
+                    @SuppressWarnings("unchecked")
+                    List<Boolean> correctList = (List<Boolean>) resp[1];
+                    String ip = socket.getInetAddress().getHostAddress();
 
                     SwingUtilities.invokeLater(() -> {
-                        // Re-enable submit button
-                        Component[] comps = ((JPanel)getContentPane().getComponent(2)).getComponents();
-                        for (Component comp : comps) {
-                            if (comp instanceof JButton) {
-                                comp.setEnabled(true);
-                                ((JButton)comp).setText("NOP BAI THI");
-                            }
-                        }
-                        
-                        // Show result with styled dialog
-                        showResultDialog(name, score.get(), ip);
-
-                        // Update UI to show correct/incorrect answers
+                        showResultDialog(name, score, ip);
                         updateAnswerColors(correctList);
-                    });
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    SwingUtilities.invokeLater(() -> {
-                        // Re-enable submit button
-                        Component[] comps = ((JPanel)getContentPane().getComponent(2)).getComponents();
-                        for (Component comp : comps) {
-                            if (comp instanceof JButton) {
-                                comp.setEnabled(true);
-                                ((JButton)comp).setText("NOP BAI THI");
+                        
+                        // Vô hiệu hóa tất cả các nút và xóa listener để kết quả không bị thay đổi
+                        for (List<JRadioButton> buttons : optionButtons) {
+                            for(JRadioButton btn : buttons){
+                                btn.setEnabled(false);
+                                // Xóa listener để không còn sự kiện nào tác động
+                                for(ActionListener al : btn.getActionListeners()){
+                                    btn.removeActionListener(al);
+                                }
                             }
                         }
-                        showStyledMessage("Loi khi nop bai: " + ex.getMessage(), "Loi", JOptionPane.ERROR_MESSAGE);
                     });
+                } catch (Exception ex) {
+                    isSubmitted = false; // Cho phép thử lại nếu có lỗi mạng
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, "Lỗi khi nộp bài: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE));
                 }
             }).start();
-
         } catch (Exception ex) {
-            ex.printStackTrace();
-            showStyledMessage("Loi: " + ex.getMessage(), "Loi", JOptionPane.ERROR_MESSAGE);
+            isSubmitted = false;
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    private void showResultDialog(String name, int score, String ip) {
-        // Create custom dialog
-        JDialog resultDialog = new JDialog(this, "Ket qua bai thi", true);
-        resultDialog.setLayout(new BorderLayout());
-        
-        // Content panel
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
-        contentPanel.setBackground(Color.WHITE);
-        
-        // Score
-        JLabel scoreLabel = new JLabel("Diem so: " + score + "/" + questions.size(), SwingConstants.CENTER);
-        scoreLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        scoreLabel.setForeground(score >= questions.size() * 0.8 ? SUCCESS_COLOR : 
-                                 score >= questions.size() * 0.6 ? WARNING_COLOR : ERROR_COLOR);
-        
-        // Student name
-        JLabel nameLabel = new JLabel("Sinh vien: " + name, SwingConstants.CENTER);
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        nameLabel.setForeground(SECONDARY_COLOR);
-        
-        // IP
-        JLabel ipLabel = new JLabel("IP: " + ip, SwingConstants.CENTER);
-        ipLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        ipLabel.setForeground(SECONDARY_COLOR);
-        
-        // Percentage
-        double percentage = (double) score / questions.size() * 100;
-        JLabel percentLabel = new JLabel(String.format("Ty le dung: %.1f%%", percentage), SwingConstants.CENTER);
-        percentLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        percentLabel.setForeground(PRIMARY_COLOR);
-        
-        contentPanel.add(scoreLabel);
-        contentPanel.add(Box.createVerticalStrut(15));
-        contentPanel.add(nameLabel);
-        contentPanel.add(Box.createVerticalStrut(10));
-        contentPanel.add(ipLabel);
-        contentPanel.add(Box.createVerticalStrut(10));
-        contentPanel.add(percentLabel);
-        
-        // OK button
-        JButton okButton = new JButton("Đóng");
-        okButton.setFont(new Font("Arial", Font.BOLD, 14));
-        okButton.setBackground(PRIMARY_COLOR);
-        okButton.setForeground(Color.WHITE);
-        okButton.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-        okButton.setFocusPainted(false);
-        okButton.addActionListener(e -> resultDialog.dispose());
-        
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.add(okButton);
-        
-        resultDialog.add(contentPanel, BorderLayout.CENTER);
-        resultDialog.add(buttonPanel, BorderLayout.SOUTH);
-        resultDialog.setSize(350, 250);
-        resultDialog.setLocationRelativeTo(this);
-        resultDialog.setVisible(true);
-    }
-
+    
     private void updateAnswerColors(List<Boolean> correctList) {
-        for (int i = 0; i < optionButtons.size() && i < correctList.size(); i++) {
+        for (int i = 0; i < optionButtons.size(); i++) {
             List<JRadioButton> buttons = optionButtons.get(i);
-            boolean isCorrect = correctList.get(i);
+            int correctAnswerIndex = questions.get(i).getAnswerIndex();
             
             for (int j = 0; j < buttons.size(); j++) {
                 JRadioButton button = buttons.get(j);
-                
-                if (j == questions.get(i).getAnswerIndex()) {
-                    // Correct answer - always green
-                    button.setBackground(new Color(40, 167, 69, 150));
-                    button.setForeground(Color.WHITE);
-                } else if (button.isSelected() && !isCorrect) {
-                    // Wrong selected answer - red
-                    button.setBackground(new Color(220, 53, 69, 150));
-                    button.setForeground(Color.WHITE);
-                } else {
-                    // Keep original color for unselected options
-                    button.setBackground(CARD_COLOR);
-                    button.setForeground(Color.BLACK);
+
+                // Luôn tô màu xanh cho đáp án đúng
+                if (j == correctAnswerIndex) {
+                    button.setBackground(COLOR_CORRECT_BG);
+                    button.setText(button.getText().replace("</html>", "  ✔</html>"));
+                }
+
+                // Nếu người dùng chọn sai, tô màu đỏ cho lựa chọn đó
+                if (button.isSelected() && !correctList.get(i)) {
+                    button.setBackground(COLOR_INCORRECT_BG);
+                    button.setText(button.getText().replace("</html>", "  ❌</html>"));
                 }
             }
         }
     }
 
-    private void showStyledMessage(String message, String title, int messageType) {
-        JOptionPane.showMessageDialog(this, message, title, messageType);
+    // --- CÁC HÀM KHÁC GIỮ NGUYÊN ---
+    private JPanel createFooterPanel() {
+        JPanel footer = new JPanel(new BorderLayout());
+        footer.setBackground(COLOR_BACKGROUND);
+        footer.setBorder(BorderFactory.createEmptyBorder(20, 50, 30, 50));
+
+        JButton submitBtn = new JButton("NỘP BÀI THI");
+        submitBtn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        submitBtn.setForeground(Color.BLUE);
+        submitBtn.setFocusPainted(false);
+        submitBtn.setBorder(BorderFactory.createEmptyBorder(15, 40, 15, 40));
+        submitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        submitBtn.addActionListener(e -> submitAnswers());
+        submitBtn.setBackground(COLOR_SUCCESS);
+
+        footer.add(submitBtn, BorderLayout.EAST);
+        return footer;
+    }
+
+    private JPanel createNameSection() {
+        JPanel nameSection = createCardPanel();
+        nameSection.setLayout(new BoxLayout(nameSection, BoxLayout.Y_AXIS));
+
+        JLabel nameLabel = new JLabel("Thông tin sinh viên");
+        nameLabel.setFont(FONT_BOLD);
+        nameLabel.setForeground(COLOR_PRIMARY);
+        nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        nameField = new JTextField("Nhập họ và tên của bạn...");
+        nameField.setFont(FONT_MAIN);
+        nameField.setForeground(Color.GRAY);
+        nameField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(COLOR_BORDER, 1),
+            BorderFactory.createEmptyBorder(10, 15, 10, 15)
+        ));
+        nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        nameField.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        nameField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (nameField.getText().equals("Nhập họ và tên của bạn...")) {
+                    nameField.setText("");
+                    nameField.setForeground(Color.BLACK);
+                }
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (nameField.getText().isEmpty()) {
+                    nameField.setText("Nhập họ và tên của bạn...");
+                    nameField.setForeground(Color.GRAY);
+                }
+            }
+        });
+
+        nameSection.add(nameLabel);
+        nameSection.add(Box.createVerticalStrut(15));
+        nameSection.add(nameField);
+        return nameSection;
+    }
+    
+    private JPanel createCardPanel() {
+        JPanel card = new JPanel();
+        card.setBackground(COLOR_CARD);
+        card.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(COLOR_BORDER, 1),
+            BorderFactory.createEmptyBorder(25, 25, 25, 25)
+        ));
+        return card;
+    }
+    
+    private Image createIcon() {
+        BufferedImage icon = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = (Graphics2D) icon.getGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(COLOR_PRIMARY);
+        g2.fillRoundRect(4, 4, 24, 24, 8, 8);
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        g2.drawString("Q", 11, 22);
+        g2.dispose();
+        return icon;
+    }
+    
+    private void showResultDialog(String name, int score, String ip) {
+        JOptionPane.showMessageDialog(this,
+                String.format("Sinh viên: %s\nĐiểm số: %d/%d", name, score, questions.size()),
+                "Kết quả bài thi",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }

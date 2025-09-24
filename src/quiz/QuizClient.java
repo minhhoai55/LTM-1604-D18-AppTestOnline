@@ -11,6 +11,11 @@ public class QuizClient {
 
     public static void main(String[] args) {
         try {
+            // === THÊM 2 DÒNG NÀY ĐỂ GIAO DIỆN MƯỢT HƠN ===
+            System.setProperty("awt.useSystemAAFontSettings","on");
+            System.setProperty("swing.aatext", "true");
+            // ===============================================
+
             Socket socket = new Socket(HOST, PORT);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
