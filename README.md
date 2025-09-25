@@ -155,9 +155,8 @@ Xem kết quả và các đáp án đúng/sai
         SELECT * FROM questions;
         SELECT * FROM results;
         
-## 🔧 5. Liên hệ ( cá nhân )
+## 🔧 5. Liên hệ (cá nhân)
 
-## 👜Thông tin cá nhân
 **Họ tên**: Khổng Minh Hoài
 
 **Lớp**: CNTT 16-04
@@ -168,6 +167,7 @@ Xem kết quả và các đáp án đúng/sai
 
 
 ---
+
 
 
 
