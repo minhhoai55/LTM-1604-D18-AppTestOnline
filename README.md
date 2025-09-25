@@ -99,66 +99,72 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 </p>
 
 
-## 4. Các bước cài đặt
-🔧 Bước 1. Chuẩn bị môi trường
+## ⚡ 4. Các bước cài đặt
 
-    Cài đặt JDK 8 hoặc 11 ☕.
+### 🔧 Bước 1: Chuẩn bị môi trường
+- ☕ Cài đặt **JDK 8 hoặc 11**  
+- 🗄️ Cài đặt **MySQL 8.x + Workbench**  
+- 🛠️ Tạo **database `BTLQuiz`**
 
-    Cài đặt MySQL 8.x + Workbench 🗄️.
+---
 
-    Tạo database BTLQuiz
-🗄️ Bước 2. Tạo bảng trong MySQL
+### 🗄️ Bước 2: Tạo bảng trong MySQL
+- Import file SQL tạo bảng `questions` và `results` (hoặc chạy script tạo thủ công).  
 
-📦 Bước 3. Thêm thư viện JDBC
+---
 
-    Tải mysql-connector-j-8.x.x.jar.
+### 📦 Bước 3: Thêm thư viện JDBC
+- 📥 Tải **`mysql-connector-j-8.x.x.jar`**  
+- 📂 Copy vào thư mục **`lib/`** của project  
+- ➕ Chuột phải chọn **Add to Build Path** trong IDE
 
-    Copy vào thư mục lib/ của project → Add to Build Path.
-⚙️ Bước 4. Cấu hình kết nối
+---
 
-    Trong DbHelper.java:
-
-    public class DbHelper {
-        private static final String URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
-        private static final String USER = "root";
-        private static final String PASS = "your_password";
-
-        public static Connection open() throws Exception {
-            return DriverManager.getConnection(URL, USER, PASS);
+### ⚙️ Bước 4: Cấu hình kết nối
+        Trong file **`DbHelper.java`**:  
+        
+        ```java
+        public class DbHelper {
+            private static final String URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
+            private static final String USER = "root";
+            private static final String PASS = "your_password";
+        
+            public static Connection open() throws Exception {
+                return DriverManager.getConnection(URL, USER, PASS);
+            }
         }
-    }
+🔑 Thay your_password bằng mật khẩu MySQL của bạn.
 
-▶️ Bước 5: Chạy hệ thống
+## ▶️ Bước 5: Chạy hệ thống
 
-Chạy Server
+### 🖥️ Chạy **Server**
+- Mở **`QuizServer.java`** → nhấn **Start Server 🟢**  
+- 🌐 Server sẽ chạy trên **cổng `5000`**  
+- 📝 Giao diện **xem kết quả** sẽ hiển thị tự động  
 
-        Mở QuizServer.java → nhấn Start Server 🟢
+---
 
-Server sẽ chạy trên cổng 5000.
+### 💻 Chạy **Client**
+- Mở **`QuizClient.java`** → nhấn **Run 🚀**  
+- 🔗 Client sẽ kết nối tới **`localhost:5000`**  
+- 📝 Giao diện **làm bài thi** sẽ xuất hiện  
 
-Giao diện xem kết quả sẽ hiển thị tự động.
+---
 
-Chạy Client
+### 🎯 Sử dụng hệ thống
+1. ✍️ Nhập **tên sinh viên**  
+2. ✅ Chọn **đáp án** cho từng câu hỏi  
+3. 📤 Nhấn **Nộp bài thi** để xem **kết quả** và các đáp án **đúng/sai**  
 
-        Mở QuizClient.java → nhấn Run 🚀
+---
 
-Client sẽ kết nối tới localhost:5000
-
-Giao diện làm bài thi sẽ xuất hiện.
-
-Sử dụng hệ thống
-
-Nhập tên sinh viên.
-
-Chọn đáp án cho từng câu hỏi.
-
-Nhấn Nộp bài thi để xem kết quả và các đáp án đúng/sai.
-
-    Kiểm tra dữ liệu trong MySQL Workbench:
-
+        ### 🗄️ Kiểm tra dữ liệu trong MySQL Workbench
+        ```sql
         SELECT * FROM questions;
         SELECT * FROM results;
-        
+
+
+
 ## 🔧 5. Liên hệ (cá nhân)
 
 **Họ tên**: Khổng Minh Hoài
@@ -171,6 +177,7 @@ Nhấn Nộp bài thi để xem kết quả và các đáp án đúng/sai.
 
 
 ---
+
 
 
 
