@@ -77,25 +77,35 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 ## 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
-  <img src="docs/AnhGiaoDien.png" alt="Ảnh 1" width="100%"/>
+  <img src="docs/Dangnhap.png" alt="Ảnh 1" width="700"/>
 </p>
 
 <p align="center">
-  <em>Hình 1: Giao diện khi vào ứng dụng</em>
+  <em>Hình 1: Giao diện đăng nhập</em>
 </p>
 
 <p align="center">
-  <img src="docs/bangsql.png" alt="Ảnh 2" width="100%"/>
+  <img src="docs/Chonmon.png" alt="Ảnh 2" width="700"/>
 </p>
 <p align="center">
-  <em>Hình 2: SQL lưu trữ câu hỏi</em>
+  <em>Hình 2: Chọn môn thi</em>
+
 </p>
 
 <p align="center">
-  <img src="docs/ketquasaukhixong.png" alt="Ảnh 3" width="100%"/>
+  <img src="docs/Baithi.png" alt="Ảnh 3" width="700"/>
 </p>
 <p align="center">
-  <em>Hình 3: Kết quả sau khi làm</em>
+  <em>Hình 3: Bài thi</em>
+</p>
+  
+</p>
+
+<p align="center">
+  <img src="docs/Ketqua.png" alt="Ảnh 4" width="700"/>
+</p>
+<p align="center">
+  <em>Hình 4: Kết quả thi mà giáo viên quản lí</em>
 </p>
 
 
@@ -161,7 +171,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 ---
 
         ### 🗄️ Kiểm tra dữ liệu trong MySQL Workbench
-        ```sql
+        
         SELECT * FROM questions;
         SELECT * FROM results;
 
