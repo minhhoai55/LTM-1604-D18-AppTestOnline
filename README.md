@@ -140,21 +140,23 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 ### 🖥️ Chạy **Server**
 - Mở **`QuizServer.java`** → nhấn **Start Server 🟢**  
 - 🌐 Server sẽ chạy trên **cổng `5000`**  
-- 📝 Giao diện **xem kết quả** sẽ hiển thị tự động  
 
 ---
 
 ### 💻 Chạy **Client**
 - Mở **`QuizClient.java`** → nhấn **Run 🚀**  
 - 🔗 Client sẽ kết nối tới **`localhost:5000`**  
-- 📝 Giao diện **làm bài thi** sẽ xuất hiện  
+- 📝 Giao diện **làm bài thi** sẽ xuất hiện nếu đăng nhập tài khoản sinh viên
+- 📝 Giao diện **quản lí điểm** sẽ xuất hiện nếu đăng nhập tài khoản giáo viên
+
 
 ---
 
 ### 🎯 Sử dụng hệ thống
-1. ✍️ Nhập **tên sinh viên**  
-2. ✅ Chọn **đáp án** cho từng câu hỏi  
-3. 📤 Nhấn **Nộp bài thi** để xem **kết quả** và các đáp án **đúng/sai**  
+1. ✍️**Đăng nhập** (hoặc đăng ký nếu là lần đầu) bằng tài khoản của bạn  
+2. 📖 Chọn **môn thi** bạn muốn và hoàn thành các câu hỏi 
+3. 📤 Nhấn **Nộp bài** để xem kết quả và đáp án chi tiết
+ 
 
 ---
 
@@ -177,6 +179,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 
 
 ---
+
 
 
 
