@@ -26,44 +26,44 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 
 📌 Client kết nối đến server:
 
-Kết nối qua địa chỉ IP và port (mặc định: 5000).
+    Kết nối qua địa chỉ IP và port (mặc định: 5000).
 
-Server hỗ trợ nhiều client đồng thời thông qua cơ chế đa luồng.
+    Server hỗ trợ nhiều client đồng thời thông qua cơ chế đa luồng.
 
-Yêu cầu người dùng nhập tên để xác định danh tính.
+    Yêu cầu người dùng nhập tên để xác định danh tính.
 
 📌 Gửi và nhận câu hỏi – đáp án:
 
-Server gửi các câu hỏi trắc nghiệm đến client.
+    Server gửi các câu hỏi trắc nghiệm đến client.
 
-Người dùng chọn đáp án và gửi về server.
+    Người dùng chọn đáp án và gửi về server.
 
-Server kiểm tra và phản hồi kết quả đúng/sai theo thời gian thực.
+    Server kiểm tra và phản hồi kết quả đúng/sai theo thời gian thực.
 
 📌 Quản lý kết quả:
 
-Server lưu trữ điểm số của từng sinh viên vào cơ sở dữ liệu MySQL.
+    Server lưu trữ điểm số của từng sinh viên vào cơ sở dữ liệu MySQL.
 
-GUI admin hiển thị IP và điểm số theo thời gian thực.
+    GUI admin hiển thị IP và điểm số theo thời gian thực.
 
 📌 Client GUI trực quan:
 
-Giao diện đẹp, scroll mượt, thân thiện với người dùng.
+    Giao diện đẹp, scroll mượt, thân thiện với người dùng.
 
-Nút submit sẽ disable sau khi nộp bài.
+    Nút submit sẽ disable sau khi nộp bài.
 
-Hiển thị điểm số cuối cùng ngay trên client.
+    Hiển thị điểm số cuối cùng ngay trên client.
 
 🔹 Ý nghĩa ứng dụng:
-Hệ thống giúp sinh viên và nhà phát triển:
+    Hệ thống giúp sinh viên và nhà phát triển:
 
-Hiểu cơ chế Client–Server và truyền nhận dữ liệu tin cậy qua TCP.
+    Hiểu cơ chế Client–Server và truyền nhận dữ liệu tin cậy qua TCP.
 
-Thực hành triển khai ứng dụng Java đa luồng.
+    Thực hành triển khai ứng dụng Java đa luồng.
 
-Rèn luyện kỹ năng thiết kế GUI và lưu trữ dữ liệu MySQL.
+    Rèn luyện kỹ năng thiết kế GUI và lưu trữ dữ liệu MySQL.
 
-Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến và phân tích kết quả học tập.
+    Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến và phân tích kết quả học tập.
 
 
 ## 🔧 2. Công nghệ sử dụng  
@@ -73,144 +73,102 @@ Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến v
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/) 
 [![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipseide&logoColor=white)](https://www.eclipse.org/) 
 
+
 ## 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
-  <img src="docs/Dangnhap.png" alt="Ảnh 1" width="700"/>
+  <img src="docs/AnhGiaoDien.png" alt="Ảnh 1" width="100%"/>
 </p>
 
 <p align="center">
-  <em>Hình 1: Giao diện Đăng nhập  </em>
+  <em>Hình 1: Giao diện khi vào ứng dụng</em>
 </p>
 
 <p align="center">
-  <img src="docs/Chonmon.png" alt="Ảnh 3" width="700"/>
+  <img src="docs/bangsql.png" alt="Ảnh 2" width="100%"/>
+</p>
+<p align="center">
+  <em>Hình 2: SQL lưu trữ câu hỏi</em>
+</p>
+
+<p align="center">
+  <img src="docs/ketquasaukhixong.png" alt="Ảnh 3" width="100%"/>
+</p>
+<p align="center">
+  <em>Hình 3: Kết quả sau khi làm</em>
+</p>
+
+
+## ⚡ 4. Các bước cài đặt
+
+### 🔧 Bước 1: Chuẩn bị môi trường
+- ☕ Cài đặt **JDK 8 hoặc 11**  
+- 🗄️ Cài đặt **MySQL 8.x + Workbench**  
+- 🛠️ Tạo **database `BTLQuiz`**
+
+---
+
+### 🗄️ Bước 2: Tạo bảng trong MySQL
+- Import file SQL tạo bảng `questions` và `results` (hoặc chạy script tạo thủ công).  
+
+---
+
+### 📦 Bước 3: Thêm thư viện JDBC
+- 📥 Tải **`mysql-connector-j-8.x.x.jar`**  
+- 📂 Copy vào thư mục **`lib/`** của project  
+- ➕ Chuột phải chọn **Add to Build Path** trong IDE
+
+---
+
+### ⚙️ Bước 4: Cấu hình kết nối
+        Trong file **`DbHelper.java`**:  
+        
+        ```java
+        public class DbHelper {
+            private static final String URL = "jdbc:mysql://127.0.0.1:3306/BTLQuiz?serverTimezone=UTC";
+            private static final String USER = "root";
+            private static final String PASS = "your_password";
+        
+            public static Connection open() throws Exception {
+                return DriverManager.getConnection(URL, USER, PASS);
+            }
+        }
+🔑 Thay your_password bằng mật khẩu MySQL của bạn.
+
+## ▶️ Bước 5: Chạy hệ thống
+
+### 🖥️ Chạy **Server**
+- Mở **`QuizServer.java`** → nhấn **Start Server 🟢**  
+- 🌐 Server sẽ chạy trên **cổng `5000`**  
+
+---
+
+### 💻 Chạy **Client**
+- Mở **`QuizClient.java`** → nhấn **Run 🚀**  
+- 🔗 Client sẽ kết nối tới **`localhost:5000`**  
+- 📝 Giao diện **làm bài thi** sẽ xuất hiện nếu đăng nhập tài khoản sinh viên
+- 📝 Giao diện **quản lí điểm** sẽ xuất hiện nếu đăng nhập tài khoản giáo viên
+
+
+---
+
+### 🎯 Sử dụng hệ thống
+1. ✍️**Đăng nhập** (hoặc đăng ký nếu là lần đầu) bằng tài khoản của bạn  
+2. 📖 Chọn **môn thi** bạn muốn và hoàn thành các câu hỏi 
+3. 📤 Nhấn **Nộp bài** để xem kết quả và đáp án chi tiết
  
-</p>
-<p align="center">
-  <em>Hình 2: Chọn môn thi  </em>
-</p>
 
-<p align="center">
-    <img src="docs/Baithi.png" alt="Ảnh 4" width="450"/>
-</p>
-<p align="center">
-  <em> Hình 3: Giao diện bài thi </em>
-</p>
+---
 
-<p align="center">
-    <img src="docs/Ketqua.png" alt="Ảnh 4" width="450"/>
-</p>
-<p align="center">
-  <em> Hình 4: Giao diện kết quả bài thi </em>
-</p>
-
-### 📦 4. Cài đặt và triển khai
-**Bước 1: Chuẩn Bị Môi Trường**
-
-Kiểm tra Java:
-
-java -version
-
-javac -version
+        ### 🗄️ Kiểm tra dữ liệu trong MySQL Workbench
+        ```sql
+        SELECT * FROM questions;
+        SELECT * FROM results;
 
 
-Đảm bảo hiển thị Java 8 trở lên.
 
-Cài đặt MySQL/MariaDB và tạo cơ sở dữ liệu:
+## 🔧 5. Liên hệ (cá nhân)
 
-CREATE DATABASE BTLQuiz;
-
-USE BTLQuiz;
-
--- Tạo bảng questions
-CREATE TABLE questions (
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    
-    content TEXT NOT NULL,
-    
-    option1 VARCHAR(255),
-    
-    option2 VARCHAR(255),
-    
-    option3 VARCHAR(255),
-    
-    option4 VARCHAR(255),
-    
-    answerIndex INT
-    
-);
-
--- Tạo bảng results
-
-
-CREATE TABLE results (
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    
-    name VARCHAR(255),
-    
-    score INT,
-    
-    ip VARCHAR(50),
-    
-    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    
-);
-
-
-Tải mã nguồn:
-
-Sao chép thư mục UngDungTracNghiem_TCP chứa các file:
-
-QuizServer.java, QuizClient.java, QuizClientSwing.java, Question.java, ResultsViewerSwing.java.
-
-**Bước 2: Biên Dịch Mã Nguồn**
-
-Mở terminal và điều hướng đến thư mục chứa mã nguồn.
-
-Biên dịch tất cả file:
-
-javac quiz/*.java
-
-
-Hoặc biên dịch từng file:
-
-javac quiz/QuizServer.java
-javac quiz/QuizClient.java
-javac quiz/QuizClientSwing.java
-javac quiz/Question.java
-javac quiz/ResultsViewerSwing.java
-
-
-Kết quả: các file .class tương ứng sẽ được tạo ra trong thư mục quiz.
-
-**Bước 3: Chạy Ứng Dụng**
-
-Khởi động Server:
-
-  java quiz.QuizServer
-
-Server sẽ khởi động ở port mặc định 5000.
-
-Console hiển thị log khi có client kết nối.
-
-
-Khởi động Client:
-
-  java quiz.QuizClient
-
-
-Mỗi client mở trong cửa sổ riêng (GUI Swing).
-
-Nhập Tên sinh viên → bấm Start để nhận câu hỏi.
-
-Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
-
-## 🔧 5. Liên hệ ( cá nhân )
-
-## 👜Thông tin cá nhân
 **Họ tên**: Khổng Minh Hoài
 
 **Lớp**: CNTT 16-04
@@ -221,4 +179,11 @@ Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
 
 
 ---
+
+
+
+
+
+
+
 
