@@ -77,27 +77,64 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 ## 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
+<<<<<<< HEAD
+  <img src="docs/Dangnhap.png" alt="Ảnh 1" width="700"/>
+=======
   <img src="docs/AnhGiaoDien.png" alt="Ảnh 1" width="100%"/>
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
 </p>
 
 <p align="center">
+<<<<<<< HEAD
+  <em>Hình 1: Giao diện Đăng nhập  </em>
+=======
   <em>Hình 1: Giao diện khi vào ứng dụng</em>
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
 </p>
 
 <p align="center">
+<<<<<<< HEAD
+  <img src="docs/Chonmon.png" alt="Ảnh 3" width="700"/>
+ 
+=======
   <img src="docs/bangsql.png" alt="Ảnh 2" width="100%"/>
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
 </p>
 <p align="center">
+<<<<<<< HEAD
+  <em>Hình 2: Chọn môn thi  </em>
+=======
   <em>Hình 2: SQL lưu trữ câu hỏi</em>
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
 </p>
 
 <p align="center">
+<<<<<<< HEAD
+    <img src="docs/Baithi.png" alt="Ảnh 4" width="700"/>
+=======
   <img src="docs/ketquasaukhixong.png" alt="Ảnh 3" width="100%"/>
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
 </p>
 <p align="center">
+<<<<<<< HEAD
+  <em> Hình 3: Giao diện bài thi </em>
+=======
   <em>Hình 3: Kết quả sau khi làm</em>
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
 </p>
 
+<<<<<<< HEAD
+<p align="center">
+    <img src="docs/Ketqua.png" alt="Ảnh 4" width="700"/>
+</p>
+<p align="center">
+  <em> Hình 4: Giao diện kết quả bài thi </em>
+</p>
+
+### 📦 4. Cài đặt và triển khai
+**Bước 1: Chuẩn Bị Môi Trường**
+=======
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
 
 ## ⚡ 4. Các bước cài đặt
 
@@ -188,3 +225,38 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 
 
 
+
+<<<<<<< HEAD
+java quiz.QuizClient
+
+
+Mỗi client mở trong cửa sổ riêng (GUI Swing).
+
+Nhập Tên sinh viên → bấm Start để nhận câu hỏi.
+
+Sau khi hoàn thành, điểm số sẽ hiển thị ngay trên client.
+
+## 🔧 5. Liên hệ ( cá nhân )
+
+## 👜Thông tin cá nhân
+**Họ tên**: Khổng Minh Hoài
+
+**Lớp**: CNTT 16-04
+
+**Email**: khonghoai.15052004@gmail.com
+
+© 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
+
+
+---
+
+
+
+<<<<<<< HEAD
+
+
+=======
+
+>>>>>>> fb4e879f350836cdd89672703e71950db545ca44
+=======
+>>>>>>> 237f403f170d0274a1c93412924616d22d11b7f9
