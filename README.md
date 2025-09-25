@@ -128,27 +128,31 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
         }
     }
 
-▶️ Bước 5. Chạy hệ thống
+▶️ Bước 5: Chạy hệ thống
 
-    Chạy QuizServer.java → nhấn Start Server 🟢.
+Chạy Server
 
-Server sẽ chạy trên port 5000
+        Mở QuizServer.java → nhấn Start Server 🟢
 
-Giao diện xem kết quả sẽ hiển thị tự động
+Server sẽ chạy trên cổng 5000.
 
-    Chạy QuizClient.java → nhấn Run 🚀.
+Giao diện xem kết quả sẽ hiển thị tự động.
+
+Chạy Client
+
+        Mở QuizClient.java → nhấn Run 🚀
 
 Client sẽ kết nối tới localhost:5000
 
-Giao diện làm bài thi sẽ hiển thị    
+Giao diện làm bài thi sẽ xuất hiện.
 
-Nhập tên sinh viên
+Sử dụng hệ thống
 
-Chọn đáp án cho từng câu hỏi
+Nhập tên sinh viên.
 
-Nhấn "Nộp bài thi"
+Chọn đáp án cho từng câu hỏi.
 
-Xem kết quả và các đáp án đúng/sai
+Nhấn Nộp bài thi để xem kết quả và các đáp án đúng/sai.
 
     Kiểm tra dữ liệu trong MySQL Workbench:
 
@@ -167,6 +171,7 @@ Xem kết quả và các đáp án đúng/sai
 
 
 ---
+
 
 
 
