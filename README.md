@@ -19,7 +19,7 @@
 
 </div>
 
-## 📖 1. Giới thiệu
+# 📖 1. Giới thiệu
 Ứng dụng Trắc nghiệm trực tuyến Client–Server được phát triển bằng Java, dựa trên giao thức TCP nhằm đảm bảo việc trao đổi dữ liệu tin cậy và chính xác. Hệ thống cho phép sinh viên/kỹ thuật viên kết nối tới server, thực hiện làm bài trắc nghiệm và nhận kết quả ngay sau khi hoàn thành.
 
 Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực tuyến:
@@ -66,7 +66,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
     Làm nền tảng mở rộng cho các ứng dụng khảo thí trực tuyến và phân tích kết quả học tập.
 
 
-## 🔧 2. Công nghệ sử dụng  
+# 🔧 2. Công nghệ sử dụng  
 
 [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html) 
 [![Swing](https://img.shields.io/badge/Java%20Swing-007396?style=for-the-badge&logo=java&logoColor=white)](https://docs.oracle.com/javase/tutorial/uiswing/) 
@@ -74,7 +74,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 [![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=eclipseide&logoColor=white)](https://www.eclipse.org/) 
 
 
-## 🚀 3. Một số hình ảnh của hệ thống
+# 🚀 3. Một số hình ảnh của hệ thống
 
 <p align="center">
   <img src="docs/Dangnhap.png" alt="Ảnh 1" width="700"/>
@@ -109,7 +109,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 </p>
 
 
-## ⚡ 4. Các bước cài đặt
+# ⚡ 4. Các bước cài đặt
 
 ### 🔧 Bước 1: Chuẩn bị môi trường
 - ☕ Cài đặt **JDK 8 hoặc 11**  
@@ -117,7 +117,6 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 - 🛠️ Tạo **database `BTLQuiz`**
 
 ---
-
 ### 🗄️ Bước 2: Tạo bảng trong MySQL
 - Import file SQL tạo bảng `questions` và `results` (hoặc chạy script tạo thủ công).  
 
@@ -145,15 +144,15 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
         }
 🔑 Thay your_password bằng mật khẩu MySQL của bạn.
 
-## ▶️ Bước 5: Chạy hệ thống
+### ▶️ Bước 5: Chạy hệ thống
 
-### 🖥️ Chạy **Server**
+## 🖥️ Chạy **Server**
 - Mở **`QuizServer.java`** → nhấn **Start Server 🟢**  
 - 🌐 Server sẽ chạy trên **cổng `5000`**  
 
 ---
 
-### 💻 Chạy **Client**
+## 💻 Chạy **Client**
 - Mở **`QuizClient.java`** → nhấn **Run 🚀**  
 - 🔗 Client sẽ kết nối tới **`localhost:5000`**  
 - 📝 Giao diện **làm bài thi** sẽ xuất hiện nếu đăng nhập tài khoản sinh viên
@@ -162,7 +161,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 
 ---
 
-### 🎯 Sử dụng hệ thống
+## 🎯 Sử dụng hệ thống
 1. ✍️**Đăng nhập** (hoặc đăng ký nếu là lần đầu) bằng tài khoản của bạn  
 2. 📖 Chọn **môn thi** bạn muốn và hoàn thành các câu hỏi 
 3. 📤 Nhấn **Nộp bài** để xem kết quả và đáp án chi tiết
@@ -177,7 +176,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 
 
 
-## 🔧 5. Liên hệ (cá nhân)
+# 🔧 5. Liên hệ (cá nhân)
 
 **Họ tên**: Khổng Minh Hoài
 
@@ -189,6 +188,7 @@ Hệ thống đáp ứng các yêu cầu cơ bản của một bài thi trực t
 
 
 ---
+
 
 
 
